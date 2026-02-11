@@ -2,7 +2,9 @@ async function load(){
   const res = await fetch('./data.json', {cache:'no-store'});
   const d = await res.json();
 
-  document.getElementById('meta').textContent = `Actualizado: ${d.updatedAt} · Zona: ${d.timezone}`;
+  const nextEta = d.nextEstimatedUpdateAt ? ` · Próx update: ${d.nextEstimatedUpdateAt}` : '';
+  const freq = d.refreshEveryMinutes ? ` · Frecuencia: ${d.refreshEveryMinutes} min` : '';
+  document.getElementById('meta').textContent = `Actualizado: ${d.updatedAt}${nextEta}${freq} · Zona: ${d.timezone}`;
 
   const ql = document.getElementById('quicklinks');
   ql.innerHTML = '';
