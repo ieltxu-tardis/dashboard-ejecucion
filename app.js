@@ -32,6 +32,7 @@ async function load(){
   renderList('health', d.health);
   renderList('architecture', d.architecture || []);
   renderList('personas', d.personaRuntime || []);
+  renderList('liveops', d.liveOps || []);
   renderList('roadmap', d.personaRoadmap || []);
 
   const tree = document.querySelector('#structure .tree');

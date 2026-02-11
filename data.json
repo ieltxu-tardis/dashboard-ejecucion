@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-02-11 03:25 ART",
+  "updatedAt": "2026-02-11 03:48 ART",
   "timezone": "America/Argentina/Buenos_Aires",
   "quickLinks": [
     {
@@ -86,5 +86,12 @@
     "🟢 tardis · runs:0 · blocked:0 · thr:n/a",
     "🟢 builder · runs:0 · blocked:0 · thr:n/a",
     "🟢 scout · runs:0 · blocked:0 · thr:n/a"
+  ],
+  "liveOps": [
+    "Heartbeat: cada 10 min",
+    "Último commit: 882f4a1 Add Tardis autonomous night-shift task plan",
+    "Cambios sin commit (workspace): 15",
+    "Tareas Tardis pendientes: 7",
+    "Última actualización: 2026-02-11 03:48 ART"
   ]
 }
