@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-02-11 19:24 ART",
+  "updatedAt": "2026-02-11 20:15 ART",
   "timezone": "America/Argentina/Buenos_Aires",
   "quickLinks": [
     {
@@ -93,18 +93,18 @@
   ],
   "liveOps": [
     "Frecuencia refresh: cada 60 min",
-    "Próxima actualización estimada: 2026-02-11 20:24 ART",
+    "Próxima actualización estimada: 2026-02-11 21:15 ART",
     "Último commit local: a0acf1f chore: auto-refresh dashboard",
-    "Cambios sin commit (workspace): 11",
+    "Cambios sin commit (workspace): 16",
     "Tareas Tardis pendientes: 7",
-    "Última actualización efectiva: 2026-02-11 19:24 ART"
+    "Última actualización efectiva: 2026-02-11 20:15 ART"
   ],
-  "updatedAtIso": "2026-02-11T19:24:36.974494-03:00",
+  "updatedAtIso": "2026-02-11T20:15:45.746315-03:00",
   "refreshEveryMinutes": 60,
-  "nextEstimatedUpdateAt": "2026-02-11 20:24 ART",
+  "nextEstimatedUpdateAt": "2026-02-11 21:15 ART",
   "agentLive": [
-    "🟢 running tardis · hace 1m · 19:22 ART · ctx 37.7%",
-    "🟢 running builder · hace 2m · 19:21 ART · ctx 52.3%",
+    "🟡 idle tardis · hace 41m · 19:34 ART · ctx 100.0%",
+    "🟡 idle builder · hace 41m · 19:34 ART · ctx 55.4%",
     "⚪ scout · sin sesión reciente · n/a"
   ]
 }
