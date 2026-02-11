@@ -1,0 +1,15 @@
+# Ignore Obsidian internal files
+.obsidian/
+
+# Ignore trash
+.trash/
+
+# Ignore large binary/media directories (adjust if you need access)
+attachments/
+assets/
+media/
+images/
+video/
+
+# Ignore temporary/system files
+.DS_Store
