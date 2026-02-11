@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-02-11 16:55 ART",
+  "updatedAt": "2026-02-11 17:11 ART",
   "timezone": "America/Argentina/Buenos_Aires",
   "quickLinks": [
     {
@@ -34,7 +34,7 @@
     "Definir alerta 7 días antes de cada cobro"
   ],
   "relationships": [
-    "Hoy: 16 meses con Anto",
+    "Último hito: 16 meses con Anto (10/02)",
     "Definir 2 recordatorios semanales para familia/amigos"
   ],
   "aiSignal": [
@@ -56,31 +56,35 @@
     "Sueño: mejorar consistencia sin perder cronotipo"
   ],
   "architecture": [
-    "work: proyectos y entregables profesionales",
-    "personal: sistema personal, hábitos, finanzas, relaciones",
-    "general: utilidades y experimentos compartidos",
-    "personas: orquestador default + especialistas delegables"
+    "`domains/work/` → cosas de trabajo (proyectos, dashboards, notas, assets)",
+    "`domains/personal/` → vida personal/sistema personal",
+    "`domains/general/` → experimentos y utilidades compartidas",
+    "`ops/agents/` → definición de roles y reglas de colaboración",
+    "`ops/routing/` → decisiones de enrutamiento por canal/contexto",
+    "`ops/playbooks/` → procedimientos operativos (deploy, backup, incidentes)",
+    "`ops/templates/` → plantillas reutilizables",
+    "`repos/` → mapeo de repos remotos y estado local"
   ],
   "structureTree": [
     "/workspace",
     "├─ domains/",
-    "│  ├─ work/{projects,dashboards,notes,assets}",
-    "│  ├─ personal/{projects,dashboards,notes,assets}",
-    "│  └─ general/{projects,dashboards,notes,assets}",
+    "│  ├─ work/",
+    "│  ├─ personal/",
+    "│  └─ general/",
     "├─ ops/",
-    "│  ├─ agents/{TEAM_MODEL.md,PERSONAS_DISCORD_PLAN.md}",
+    "│  ├─ agents/",
     "│  ├─ routing/",
     "│  ├─ playbooks/",
     "│  └─ templates/",
-    "├─ repos/{private,public,archive}",
-    "├─ dashboard/ (site público)",
-    "└─ system-core/ (repo privado)"
+    "├─ repos/",
+    "├─ dashboard/",
+    "└─ system-core/"
   ],
   "personaRoadmap": [
-    "Fase 1 (ahora): orquestador-first + roles internos (builder/scout)",
-    "Fase 2: contratos por persona (misión, inputs, outputs, tool policy)",
-    "Fase 3: bot de Discord por persona con token y permisos mínimos",
-    "Fase 4: handoff explícito + auditoría semanal de permisos/tokens"
+    "✅ Done: contratos + handoff base (ok)",
+    "🟡 In progress: routing robusto por canal/cuenta/mention (builder fuera de #ideas-y-ganchos)",
+    "⏭ Next 72h: matrix final + checklist validación + patch approve&go",
+    "⏭ Next: telemetría realtime de agentes (running/blocked/done) en dashboard"
   ],
   "personaRuntime": [
     "🟢 tardis · runs:0 · blocked:0 · thr:n/a · notas:0 · última señal:sin actividad",
@@ -89,13 +93,13 @@
   ],
   "liveOps": [
     "Frecuencia refresh: cada 60 min",
-    "Próxima actualización estimada: 2026-02-11 17:55 ART",
+    "Próxima actualización estimada: 2026-02-11 18:11 ART",
     "Último commit local: a0acf1f chore: auto-refresh dashboard",
-    "Cambios sin commit (workspace): 5",
+    "Cambios sin commit (workspace): 7",
     "Tareas Tardis pendientes: 7",
-    "Última actualización efectiva: 2026-02-11 16:55 ART"
+    "Última actualización efectiva: 2026-02-11 17:11 ART"
   ],
-  "updatedAtIso": "2026-02-11T16:55:55.092030-03:00",
+  "updatedAtIso": "2026-02-11T17:11:12.239047-03:00",
   "refreshEveryMinutes": 60,
-  "nextEstimatedUpdateAt": "2026-02-11 17:55 ART"
+  "nextEstimatedUpdateAt": "2026-02-11 18:11 ART"
 }
