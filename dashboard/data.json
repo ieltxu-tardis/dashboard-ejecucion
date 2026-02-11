@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-02-11 08:48 ART",
+  "updatedAt": "2026-02-11 08:58 ART",
   "timezone": "America/Argentina/Buenos_Aires",
   "quickLinks": [
     {
@@ -89,11 +89,11 @@
   ],
   "liveOps": [
     "Heartbeat: cada 10 min",
-    "Último commit local: e6e379c chore: auto-refresh dashboard pages",
-    "Último deploy pages: e6e379c chore: auto-refresh dashboard pages",
+    "Último commit local: a5f16d3 chore(dashboard): auto-refresh execution dashboard",
+    "Último deploy pages: a5f16d3 chore(dashboard): auto-refresh execution dashboard",
     "Cambios sin commit (workspace): 0",
     "Tareas Tardis pendientes: 7",
     "Freshness target: <=10m",
-    "Última actualización: 2026-02-11 08:48 ART"
+    "Última actualización: 2026-02-11 08:58 ART"
   ]
 }
