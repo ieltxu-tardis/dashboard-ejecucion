@@ -34,6 +34,7 @@ async function load(){
   renderList('health', d.health);
   renderList('architecture', d.architecture || []);
   renderList('personas', d.personaRuntime || []);
+  renderList('agentlive', d.agentLive || []);
   renderList('liveops', d.liveOps || []);
   renderList('roadmap', d.personaRoadmap || []);
 
