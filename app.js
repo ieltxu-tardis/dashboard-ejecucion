@@ -22,6 +22,7 @@ async function load(){
   renderList('relationships', d.relationships);
   renderList('ai', d.aiSignal.map(i => `${i.title} — ${i.note}`));
   renderList('health', d.health);
+  renderList('architecture', d.architecture || []);
 }
 
 function renderList(id, items, opts={}){

@@ -40,5 +40,11 @@
   "health": [
     "Entreno: 2-3 sesiones/semana de 20 min",
     "Sueño: mejorar consistencia sin perder cronotipo"
+  ],
+  "architecture": [
+    "work: proyectos y entregables profesionales",
+    "personal: sistema personal, hábitos, finanzas, relaciones",
+    "general: utilidades y experimentos compartidos",
+    "personas: orquestador default + especialistas delegables"
   ]
 }
