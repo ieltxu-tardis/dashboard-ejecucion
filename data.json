@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-02-11 04:41 ART",
+  "updatedAt": "2026-02-11 04:42 ART",
   "timezone": "America/Argentina/Buenos_Aires",
   "quickLinks": [
     {
@@ -90,10 +90,10 @@
   "liveOps": [
     "Heartbeat: cada 10 min",
     "Último commit local: 483c488 Log configurable reporting system and 3-day OpenClaw capability check",
-    "Último deploy pages: 66a2a48 chore: auto-refresh dashboard",
-    "Cambios sin commit (workspace): 6",
+    "Último deploy pages: 3a0518a Force refresh dashboard with current live ops timestamp",
+    "Cambios sin commit (workspace): 9",
     "Tareas Tardis pendientes: 7",
     "Freshness target: <=10m",
-    "Última actualización: 2026-02-11 04:41 ART"
+    "Última actualización: 2026-02-11 04:42 ART"
   ]
 }
