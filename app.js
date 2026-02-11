@@ -4,6 +4,14 @@ async function load(){
 
   document.getElementById('meta').textContent = `Actualizado: ${d.updatedAt} · Zona: ${d.timezone}`;
 
+  const ql = document.getElementById('quicklinks');
+  ql.innerHTML = '';
+  (d.quickLinks || []).forEach(l => {
+    const a = document.createElement('a');
+    a.href = l.url; a.target = '_blank'; a.rel = 'noreferrer'; a.textContent = l.label;
+    ql.appendChild(a);
+  });
+
   renderList('top3', d.top3);
   renderList('system', [
     `NEXT activos: ${d.system.nextActive} / 3`,
@@ -23,6 +31,10 @@ async function load(){
   renderList('ai', d.aiSignal.map(i => `${i.title} — ${i.note}`));
   renderList('health', d.health);
   renderList('architecture', d.architecture || []);
+  renderList('roadmap', d.personaRoadmap || []);
+
+  const tree = document.querySelector('#structure .tree');
+  tree.textContent = (d.structureTree || []).join('\n');
 }
 
 function renderList(id, items, opts={}){
