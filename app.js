@@ -31,6 +31,7 @@ async function load(){
   renderList('ai', d.aiSignal.map(i => `${i.title} — ${i.note}`));
   renderList('health', d.health);
   renderList('architecture', d.architecture || []);
+  renderList('personas', d.personaRuntime || []);
   renderList('roadmap', d.personaRoadmap || []);
 
   const tree = document.querySelector('#structure .tree');
