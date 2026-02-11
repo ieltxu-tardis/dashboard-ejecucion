@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-02-11 02:20 ART",
+  "updatedAt": "2026-02-11 02:41 ART",
   "timezone": "America/Argentina/Buenos_Aires",
   "top3": [
     "Daily AM/PM planning loop",
@@ -12,7 +12,7 @@
     "waiting": 1
   },
   "momentum": {
-    "streakDays": 1,
+    "streakDays": 2,
     "lastDoneHoursAgo": 0
   },
   "finance": [
@@ -24,9 +24,18 @@
     "Definir 2 recordatorios semanales para familia/amigos"
   ],
   "aiSignal": [
-    {"title":"Agent orchestration", "note":"priorizar retries + notificaciones"},
-    {"title":"Context packs", "note":"estandarizar template por proyecto"},
-    {"title":"Noise filtering", "note":"mover bookmarks útiles a base searchable"}
+    {
+      "title": "Agent orchestration",
+      "note": "priorizar retries + notificaciones"
+    },
+    {
+      "title": "Context packs",
+      "note": "estandarizar template por proyecto"
+    },
+    {
+      "title": "Noise filtering",
+      "note": "mover bookmarks útiles a base searchable"
+    }
   ],
   "health": [
     "Entreno: 2-3 sesiones/semana de 20 min",
