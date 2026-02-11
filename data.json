@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-02-11 17:11 ART",
+  "updatedAt": "2026-02-11 18:15 ART",
   "timezone": "America/Argentina/Buenos_Aires",
   "quickLinks": [
     {
@@ -93,13 +93,13 @@
   ],
   "liveOps": [
     "Frecuencia refresh: cada 60 min",
-    "Próxima actualización estimada: 2026-02-11 18:11 ART",
+    "Próxima actualización estimada: 2026-02-11 19:15 ART",
     "Último commit local: a0acf1f chore: auto-refresh dashboard",
     "Cambios sin commit (workspace): 7",
     "Tareas Tardis pendientes: 7",
-    "Última actualización efectiva: 2026-02-11 17:11 ART"
+    "Última actualización efectiva: 2026-02-11 18:15 ART"
   ],
-  "updatedAtIso": "2026-02-11T17:11:12.239047-03:00",
+  "updatedAtIso": "2026-02-11T18:15:46.389587-03:00",
   "refreshEveryMinutes": 60,
-  "nextEstimatedUpdateAt": "2026-02-11 18:11 ART"
+  "nextEstimatedUpdateAt": "2026-02-11 19:15 ART"
 }
