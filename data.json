@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-02-12 14:31 ART",
+  "updatedAt": "2026-02-12 14:32 ART",
   "timezone": "America/Argentina/Buenos_Aires",
   "quickLinks": [
     {
@@ -93,15 +93,15 @@
   ],
   "liveOps": [
     "Frecuencia refresh: cada 60 min",
-    "Próxima actualización estimada: 2026-02-12 15:31 ART",
+    "Próxima actualización estimada: 2026-02-12 15:32 ART",
     "Último commit local: a0acf1f chore: auto-refresh dashboard",
     "Cambios sin commit (workspace): 42",
     "Tareas Tardis pendientes: 7",
-    "Última actualización efectiva: 2026-02-12 14:31 ART"
+    "Última actualización efectiva: 2026-02-12 14:32 ART"
   ],
-  "updatedAtIso": "2026-02-12T14:31:42.062117-03:00",
+  "updatedAtIso": "2026-02-12T14:32:03.903513-03:00",
   "refreshEveryMinutes": 60,
-  "nextEstimatedUpdateAt": "2026-02-12 15:31 ART",
+  "nextEstimatedUpdateAt": "2026-02-12 15:32 ART",
   "agentLive": [
     "⚪ tardis · tracker unavailable",
     "⚪ builder · tracker unavailable",
@@ -117,7 +117,7 @@
     "Estado: stale",
     "Último import: import-20260211-081708.log",
     "Último update sandbox: 2026-02-11T09:09:01.816670+00:00",
-    "Stale (horas): 32.39",
+    "Stale (horas): 32.4",
     "SHA: 0eb025a4d0026d0876c65b6dabb5bac8146582b5dde08ce31ed48bb424a724cd",
     "Acción sugerida: ejecutar bridge pull + validar origen Obsidian"
   ],
@@ -133,7 +133,7 @@
         "/root/.openclaw/workspace/dashboard",
         "/root/.openclaw/workspace/scripts/update_dashboard.py"
       ],
-      "lastChangedAt": "2026-02-12T17:32:33.327761+00:00",
+      "lastChangedAt": "2026-02-12T17:32:55.281026+00:00",
       "healthy": true,
       "missingPaths": 0
     },
@@ -196,7 +196,7 @@
     }
   ],
   "structureNav": [
-    "dashboard · last=2026-02-12T17:32:33.327761+00:00 · healthy=True",
+    "dashboard · last=2026-02-12T17:32:55.281026+00:00 · healthy=True",
     "reports-radar · last=2026-02-12T14:00:28.806860+00:00 · healthy=True",
     "tardis-core · last=2026-02-12T07:13:10.558805+00:00 · healthy=True",
     "bridge-obsidian · last=2026-02-12T05:47:29.107541+00:00 · healthy=True",
