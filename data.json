@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-02-12 14:34 ART",
+  "updatedAt": "2026-02-12 17:09 ART",
   "timezone": "America/Argentina/Buenos_Aires",
   "quickLinks": [
     {
@@ -93,15 +93,15 @@
   ],
   "liveOps": [
     "Frecuencia refresh: cada 60 min",
-    "Próxima actualización estimada: 2026-02-12 15:34 ART",
+    "Próxima actualización estimada: 2026-02-12 18:09 ART",
     "Último commit local: a0acf1f chore: auto-refresh dashboard",
-    "Cambios sin commit (workspace): 42",
+    "Cambios sin commit (workspace): 46",
     "Tareas Tardis pendientes: 7",
-    "Última actualización efectiva: 2026-02-12 14:34 ART"
+    "Última actualización efectiva: 2026-02-12 17:09 ART"
   ],
-  "updatedAtIso": "2026-02-12T14:34:07.083485-03:00",
+  "updatedAtIso": "2026-02-12T17:09:28.803722-03:00",
   "refreshEveryMinutes": 60,
-  "nextEstimatedUpdateAt": "2026-02-12 15:34 ART",
+  "nextEstimatedUpdateAt": "2026-02-12 18:09 ART",
   "agentLive": [
     "⚪ tardis · tracker unavailable",
     "⚪ builder · tracker unavailable",
@@ -117,14 +117,14 @@
     "Estado: stale",
     "Último import: import-20260211-081708.log",
     "Último update sandbox: 2026-02-11T09:09:01.816670+00:00",
-    "Stale (horas): 32.43",
+    "Stale (horas): 35.02",
     "SHA: 0eb025a4d0026d0876c65b6dabb5bac8146582b5dde08ce31ed48bb424a724cd",
     "Acción sugerida: ejecutar bridge pull + validar origen Obsidian"
   ],
   "statusBoard": [
-    "tardis: WORKING · dashboard UX hard reset (eliminar legacy cards + layout limpio + legibilidad fechas) · plan=Dashboard Rescue v2 · checkpoint=2026-02-12T04:58:00-03:00",
-    "builder: WORKING · navegación por scope real + panel changelog por scope · plan=Dashboard Rescue v2 · checkpoint=2026-02-12T04:58:00-03:00",
-    "scout: IDLE · sin tarea activa · plan=n/a · checkpoint=None"
+    "tardis: WORKING · alineación en frentes reales (OpenAI Responses + benchmark A/B + delegación) · plan=Utopía foco ejecución real · checkpoint=2026-02-12T17:09:14-03:00",
+    "builder: IDLE · P1 compaction OpenAI implementada; esperando decisión A/B · plan=P1 completado · checkpoint=2026-02-12T17:09:14-03:00",
+    "scout: IDLE · benchmark A/B en consolidación de conclusiones · plan=entregar decisión go/no-go · checkpoint=2026-02-12T17:09:14-03:00"
   ],
   "structureScopes": [
     {
@@ -133,7 +133,16 @@
         "/root/.openclaw/workspace/dashboard",
         "/root/.openclaw/workspace/scripts/update_dashboard.py"
       ],
-      "lastChangedAt": "2026-02-12T17:34:56.997496+00:00",
+      "lastChangedAt": "2026-02-12T20:10:18.762424+00:00",
+      "healthy": true,
+      "missingPaths": 0
+    },
+    {
+      "scope": "ops-agents",
+      "paths": [
+        "/root/.openclaw/workspace/ops/agents"
+      ],
+      "lastChangedAt": "2026-02-12T20:09:14.629328+00:00",
       "healthy": true,
       "missingPaths": 0
     },
@@ -142,7 +151,7 @@
       "paths": [
         "/root/.openclaw/workspace/reports"
       ],
-      "lastChangedAt": "2026-02-12T14:00:28.806860+00:00",
+      "lastChangedAt": "2026-02-12T19:12:23.767760+00:00",
       "healthy": true,
       "missingPaths": 0
     },
@@ -168,15 +177,6 @@
       "missingPaths": 0
     },
     {
-      "scope": "ops-agents",
-      "paths": [
-        "/root/.openclaw/workspace/ops/agents"
-      ],
-      "lastChangedAt": "2026-02-12T04:57:45.912542+00:00",
-      "healthy": true,
-      "missingPaths": 0
-    },
-    {
       "scope": "ops-handoffs",
       "paths": [
         "/root/.openclaw/workspace/ops/handoffs"
@@ -196,11 +196,11 @@
     }
   ],
   "structureNav": [
-    "dashboard · last=2026-02-12T17:34:56.997496+00:00 · healthy=True",
-    "reports-radar · last=2026-02-12T14:00:28.806860+00:00 · healthy=True",
+    "dashboard · last=2026-02-12T20:10:18.762424+00:00 · healthy=True",
+    "ops-agents · last=2026-02-12T20:09:14.629328+00:00 · healthy=True",
+    "reports-radar · last=2026-02-12T19:12:23.767760+00:00 · healthy=True",
     "tardis-core · last=2026-02-12T07:13:10.558805+00:00 · healthy=True",
     "bridge-obsidian · last=2026-02-12T05:47:29.107541+00:00 · healthy=True",
-    "ops-agents · last=2026-02-12T04:57:45.912542+00:00 · healthy=True",
     "ops-handoffs · last=2026-02-11T08:19:03.560215+00:00 · healthy=True",
     "domains · last=2026-02-11T08:19:03.559215+00:00 · healthy=True"
   ]
