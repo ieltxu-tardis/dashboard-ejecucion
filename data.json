@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-02-11 22:09 ART",
+  "updatedAt": "2026-02-11 22:11 ART",
   "timezone": "America/Argentina/Buenos_Aires",
   "quickLinks": [
     {
@@ -93,21 +93,27 @@
   ],
   "liveOps": [
     "Frecuencia refresh: cada 60 min",
-    "Próxima actualización estimada: 2026-02-11 23:09 ART",
+    "Próxima actualización estimada: 2026-02-11 23:11 ART",
     "Último commit local: a0acf1f chore: auto-refresh dashboard",
-    "Cambios sin commit (workspace): 17",
+    "Cambios sin commit (workspace): 18",
     "Tareas Tardis pendientes: 7",
-    "Última actualización efectiva: 2026-02-11 22:09 ART"
+    "Última actualización efectiva: 2026-02-11 22:11 ART"
   ],
-  "updatedAtIso": "2026-02-11T22:09:46.857787-03:00",
+  "updatedAtIso": "2026-02-11T22:11:29.377013-03:00",
   "refreshEveryMinutes": 60,
-  "nextEstimatedUpdateAt": "2026-02-11 23:09 ART",
+  "nextEstimatedUpdateAt": "2026-02-11 23:11 ART",
   "agentLive": [
-    "🟢 running tardis · hace 3m · 22:05 ART · ctx 100.0%",
-    "⚪ stale builder · hace 155m · 19:34 ART · ctx 55.4%",
+    "🟢 running tardis · hace 5m · 22:05 ART · ctx 100.0%",
+    "⚪ stale builder · hace 156m · 19:34 ART · ctx 55.4%",
     "⚪ scout · sin sesión reciente · n/a"
   ],
   "tokenControl": [
-    "Token report unavailable (check script/token pipeline)"
+    "Plan: pro ($0.00)",
+    "Consumo dedup 24h: 1276658",
+    "Headroom 5h: 99% libre (1% usado)",
+    "Headroom Day: 93% libre (7% usado)",
+    "Top consumidor: agent:main:discord:channel:1470141833551155260 · 272000 tokens",
+    "Daily Brief ROI: runs24h=1 · avgTotal=272000 · avgOut=3050 · eff=0.0112",
+    "Recomendación: optimizar moderado (menos longitud y foco)"
   ]
 }
