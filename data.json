@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-02-11 23:16 ART",
+  "updatedAt": "2026-02-12 01:24 ART",
   "timezone": "America/Argentina/Buenos_Aires",
   "quickLinks": [
     {
@@ -93,27 +93,35 @@
   ],
   "liveOps": [
     "Frecuencia refresh: cada 60 min",
-    "Próxima actualización estimada: 2026-02-12 00:16 ART",
+    "Próxima actualización estimada: 2026-02-12 02:24 ART",
     "Último commit local: a0acf1f chore: auto-refresh dashboard",
-    "Cambios sin commit (workspace): 20",
+    "Cambios sin commit (workspace): 26",
     "Tareas Tardis pendientes: 7",
-    "Última actualización efectiva: 2026-02-11 23:16 ART"
+    "Última actualización efectiva: 2026-02-12 01:24 ART"
   ],
-  "updatedAtIso": "2026-02-11T23:16:17.807246-03:00",
+  "updatedAtIso": "2026-02-12T01:24:36.718818-03:00",
   "refreshEveryMinutes": 60,
-  "nextEstimatedUpdateAt": "2026-02-12 00:16 ART",
+  "nextEstimatedUpdateAt": "2026-02-12 02:24 ART",
   "agentLive": [
-    "🟡 idle tardis · hace 51m · 22:25 ART · ctx 100.0%",
-    "⚪ stale builder · hace 221m · 19:34 ART · ctx 55.4%",
+    "🟢 running tardis · hace 1m · 01:23 ART · ctx 73.9%",
+    "⚪ builder · sin sesión reciente · n/a",
     "⚪ scout · sin sesión reciente · n/a"
   ],
   "tokenControl": [
     "Plan: pro ($0.00)",
-    "Consumo dedup 24h: 1274574",
-    "Headroom 5h: 98% libre (2% usado)",
-    "Headroom Day: 93% libre (7% usado)",
-    "Top consumidor: agent:main:main · 272000 tokens",
+    "Consumo dedup 24h: 1134430",
+    "Headroom 5h: 97% libre (3% usado)",
+    "Headroom Day: 92% libre (8% usado)",
+    "Top consumidor: agent:main:cron:16cb8da8-a145-4e6d-be23-a1afa6dbcc8f · 272000 tokens",
     "Daily Brief ROI: runs24h=2 · avgTotal=229323 · avgOut=2708 · eff=0.0118",
     "Recomendación: optimizar moderado (menos longitud y foco)"
+  ],
+  "bridgeControl": [
+    "Estado: stale",
+    "Último import: import-20260211-081708.log",
+    "Último update sandbox: 2026-02-11T09:09:01.816670+00:00",
+    "Stale (horas): 19.27",
+    "SHA: 0eb025a4d0026d0876c65b6dabb5bac8146582b5dde08ce31ed48bb424a724cd",
+    "Acción sugerida: ejecutar bridge pull + validar origen Obsidian"
   ]
 }
