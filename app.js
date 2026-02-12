@@ -35,21 +35,27 @@ function minTo(input) {
 }
 
 function pickNow(data) {
-  const top = data.top3?.[0] || 'Sin foco definido';
   const blocked = Number(data.system?.blocked ?? 0);
   const waiting = Number(data.system?.waiting ?? 0);
+  const updatedAt = asDate(data.updatedAtIso || data.updatedAt);
+  const ageMin = updatedAt ? Math.round((Date.now() - updatedAt.getTime()) / 60000) : null;
+  const stale = ageMin === null || ageMin > 30;
 
-  const light = blocked > 0 ? 'yellow' : 'green';
-  const label = blocked > 0 ? 'AMARILLO' : 'VERDE';
+  let light = blocked > 0 ? 'yellow' : 'green';
+  let label = blocked > 0 ? 'AMARILLO' : 'VERDE';
+  if (stale) {
+    light = 'red';
+    label = 'ROJO';
+  }
 
   return {
     light,
     label,
-    headline: top,
+    headline: stale ? 'SIN SEÑAL CONFIABLE (stale)' : (data.top3?.[0] || 'Sin foco definido'),
     items: [
-      `Actualizado: ${fmtDate(data.updatedAtIso || data.updatedAt, data.timezone || TZ_FALLBACK)}`,
+      `Actualizado: ${fmtDate(data.updatedAtIso || data.updatedAt, data.timezone || TZ_FALLBACK)}${ageMin !== null ? ` · hace ${ageMin}m` : ''}`,
       `Capacidad operativa: next=${data.system?.nextActive ?? 'n/a'} · blocked=${blocked} · waiting=${waiting}`,
-      `${(data.personaRoadmap || []).find(x => x.includes('In progress')) || 'Sin bloque activo declarado'}`
+      stale ? 'Estado operativo desactualizado: no usar este bloque para decidir.' : 'Estado operativo válido.'
     ]
   };
 }
@@ -60,23 +66,24 @@ function pickNext15(data) {
 
   let light = 'green';
   let label = 'VERDE';
-  if (mins !== null && mins < 0) {
+  if (mins === null || mins < 0) {
     light = 'red';
     label = 'ROJO';
-  } else if (mins !== null && mins > 15) {
+  } else if (mins > 15) {
     light = 'yellow';
     label = 'AMARILLO';
   }
 
-  const roadmapNext = (data.personaRoadmap || []).filter(x => x.includes('Next')).slice(0, 2);
+  const top = (data.top3 || []).slice(0, 2);
 
   return {
     light,
     label,
-    headline: mins === null ? 'Sin ETA confiable' : `Ventana operativa: ${mins} min`,
+    headline: mins === null ? 'Sin ETA confiable' : (mins < 0 ? 'Refresh vencido' : `Ventana operativa: ${mins} min`),
     items: [
       `Próxima actualización: ${fmtDate(nextUpdate, data.timezone || TZ_FALLBACK)}`,
-      ...roadmapNext,
+      `Siguiente foco: ${top[0] || 'n/a'}`,
+      `Luego: ${top[1] || 'n/a'}`,
       `Refresh objetivo: cada ${data.refreshEveryMinutes || 'n/a'} min`
     ].slice(0, 4)
   };
