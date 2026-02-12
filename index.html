@@ -3,51 +3,45 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Dashboard Personal — Cockpit</title>
+  <title>UTOPIA Control Tower v2</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <header>
-    <h1>Cockpit Operativo</h1>
-    <p id="meta"></p>
-    <nav id="quicklinks"></nav>
+  <main class="screen" aria-live="polite">
+    <header class="topbar">
+      <h1>UTOPIA CONTROL TOWER <span>v2</span></h1>
+      <p id="meta">Cargando señal operativa…</p>
+    </header>
 
-    <div class="scopebar">
-      <label for="scopeSelect">Scope:</label>
-      <select id="scopeSelect">
-        <option value="all">all</option>
-        <option value="work">work</option>
-        <option value="personal">personal</option>
-        <option value="general">general</option>
-      </select>
-    </div>
-  </header>
+    <section class="blocks" id="blocks">
+      <article class="block" id="block-now">
+        <div class="block-head">
+          <h2>AHORA</h2>
+          <span class="light" id="light-now">—</span>
+        </div>
+        <p class="headline" id="now-headline">—</p>
+        <ul id="now-list"></ul>
+      </article>
 
-  <main class="grid">
-    <section class="card card-primary" id="nextaction">
-      <h2>Siguiente acción</h2>
-      <ul></ul>
-    </section>
+      <article class="block" id="block-next">
+        <div class="block-head">
+          <h2>SIGUIENTE 15m</h2>
+          <span class="light" id="light-next">—</span>
+        </div>
+        <p class="headline" id="next-headline">—</p>
+        <ul id="next-list"></ul>
+      </article>
 
-    <section class="card" id="system">
-      <h2>Estado sistema</h2>
-      <ul></ul>
-    </section>
-
-    <section class="card" id="opsfeed">
-      <h2>Live Ops · Changelog</h2>
-      <ul></ul>
-    </section>
-
-    <section class="card" id="scopeview">
-      <h2>Scope actual</h2>
-      <ul></ul>
+      <article class="block" id="block-risks">
+        <div class="block-head">
+          <h2>RIESGOS</h2>
+          <span class="light" id="light-risks">—</span>
+        </div>
+        <p class="headline" id="risks-headline">—</p>
+        <ul id="risks-list"></ul>
+      </article>
     </section>
   </main>
-
-  <footer>
-    <small>Fuente: dashboard/data.json</small>
-  </footer>
 
   <script src="app.js"></script>
 </body>

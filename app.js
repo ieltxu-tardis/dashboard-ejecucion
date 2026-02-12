@@ -1,33 +1,23 @@
-function parseScopeFromUrl() {
-  const p = new URLSearchParams(window.location.search);
-  return p.get('scope') || 'all';
+const TZ_FALLBACK = 'America/Argentina/Buenos_Aires';
+
+function asDate(input) {
+  if (!input) return null;
+  const direct = new Date(input);
+  if (!Number.isNaN(direct.getTime())) return direct;
+
+  const art = String(input).match(/(\d{4}-\d{2}-\d{2})\s(\d{2}:\d{2})(?::\d{2})?\s*ART/i);
+  if (art) {
+    const iso = `${art[1]}T${art[2]}:00-03:00`;
+    const parsed = new Date(iso);
+    if (!Number.isNaN(parsed.getTime())) return parsed;
+  }
+
+  return null;
 }
 
-function setScopeInUrl(scope) {
-  const u = new URL(window.location.href);
-  u.searchParams.set('scope', scope);
-  window.history.replaceState({}, '', u);
-}
-
-function formatRelative(iso) {
-  if (!iso) return 'n/a';
-  const ts = new Date(iso).getTime();
-  if (Number.isNaN(ts)) return 'n/a';
-  const diffMs = ts - Date.now();
-  const abs = Math.abs(diffMs);
-  const min = Math.round(abs / 60000);
-  if (min < 1) return diffMs < 0 ? 'hace instantes' : 'en instantes';
-  if (min < 60) return diffMs < 0 ? `hace ${min}m` : `en ${min}m`;
-  const h = Math.round(min / 60);
-  if (h < 24) return diffMs < 0 ? `hace ${h}h` : `en ${h}h`;
-  const d = Math.round(h / 24);
-  return diffMs < 0 ? `hace ${d}d` : `en ${d}d`;
-}
-
-function formatAbsolute(iso, tz = 'America/Argentina/Buenos_Aires') {
-  if (!iso) return 'n/a';
-  const dt = new Date(iso);
-  if (Number.isNaN(dt.getTime())) return 'n/a';
+function fmtDate(input, tz = TZ_FALLBACK) {
+  const d = asDate(input);
+  if (!d) return 'n/a';
   return new Intl.DateTimeFormat('es-AR', {
     timeZone: tz,
     day: '2-digit',
@@ -35,153 +25,141 @@ function formatAbsolute(iso, tz = 'America/Argentina/Buenos_Aires') {
     hour: '2-digit',
     minute: '2-digit',
     hour12: false
-  }).format(dt).replace(',', '') + ' ART';
+  }).format(d).replace(',', '') + ' ART';
 }
 
-function compactTimeText(text, tz = 'America/Argentina/Buenos_Aires') {
-  if (!text) return text;
-  return String(text)
-    .replace(/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+\-]\d{2}:?\d{2})?/g, (m) => formatAbsolute(m, tz))
-    .replace(/\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}(?::\d{2})?\s*ART/g, (m) => {
-      const isoLike = m.replace(' ART', '').replace(' ', 'T') + '-03:00';
-      return formatAbsolute(isoLike, tz);
-    });
+function minTo(input) {
+  const d = asDate(input);
+  if (!d) return null;
+  return Math.round((d.getTime() - Date.now()) / 60000);
 }
 
-function limitLine(text, max = 92) {
-  const t = String(text || '');
-  return t.length > max ? `${t.slice(0, max - 1)}…` : t;
+function pickNow(data) {
+  const top = data.top3?.[0] || 'Sin foco definido';
+  const blocked = Number(data.system?.blocked ?? 0);
+  const waiting = Number(data.system?.waiting ?? 0);
+
+  const light = blocked > 0 ? 'yellow' : 'green';
+  const label = blocked > 0 ? 'AMARILLO' : 'VERDE';
+
+  return {
+    light,
+    label,
+    headline: top,
+    items: [
+      `Actualizado: ${fmtDate(data.updatedAtIso || data.updatedAt, data.timezone || TZ_FALLBACK)}`,
+      `Capacidad operativa: next=${data.system?.nextActive ?? 'n/a'} · blocked=${blocked} · waiting=${waiting}`,
+      `${(data.personaRoadmap || []).find(x => x.includes('In progress')) || 'Sin bloque activo declarado'}`
+    ]
+  };
 }
 
-function classForStatus(txt) {
-  const t = (txt || '').toLowerCase();
-  if (t.includes('🔴') || t.includes('blocked') || t.includes('down') || t.includes('error')) return 'bad';
-  if (t.includes('🟡') || t.includes('stale') || t.includes('pending') || t.includes('waiting') || t.includes('p1')) return 'warn';
-  return 'ok';
-}
+function pickNext15(data) {
+  const nextUpdate = data.nextEstimatedUpdateAtIso || data.nextEstimatedUpdateAt;
+  const mins = minTo(nextUpdate);
 
-function renderList(id, items, opts = {}) {
-  const ul = document.querySelector(`#${id} ul`);
-  if (!ul) return;
-  ul.innerHTML = '';
-  const safeItems = Array.isArray(items) ? items : [];
-  safeItems.forEach(item => {
-    const li = document.createElement('li');
-    li.textContent = limitLine(item, opts.maxLine || 96);
-    li.className = opts.classFor ? (opts.classFor(item) || '') : '';
-    ul.appendChild(li);
-  });
-}
-
-function getScopeStructure(d, scope) {
-  const raw = d.structureByScope?.[scope] || d.structureNav || d.structureTree || [];
-  const base = Array.isArray(raw) ? raw : ['Sin estructura'];
-  if (scope === 'all') return base.slice(0, 6);
-  return base
-    .filter(x => String(x).toLowerCase().includes(scope))
-    .slice(0, 6);
-}
-
-function getOpsUnified(d, scope) {
-  const fromScope = (d.changelogByScope?.[scope] || []).map(x => `Scope: ${x}`);
-  const fromLive = (d.liveOps || []).map(x => `Ops: ${x}`);
-  const fromStatus = (d.statusBoard || []).map(x => `Estado: ${x}`);
-
-  const merged = [...fromScope, ...fromLive, ...fromStatus]
-    .map(x => compactTimeText(x, d.timezone))
-    .filter(Boolean);
-
-  return [...new Set(merged)].slice(0, 8);
-}
-
-function getEvidence(d) {
-  const ev = [];
-  if (Array.isArray(d.statusBoard) && d.statusBoard[0]) ev.push(`Evidencia: ${d.statusBoard[0]}`);
-  if (Array.isArray(d.liveOps) && d.liveOps[2]) ev.push(`Evidencia: ${d.liveOps[2]}`);
-  if (!ev.length) ev.push('Evidencia: sin señal explícita en data');
-  return ev.slice(0, 2);
-}
-
-async function load() {
-  const res = await fetch('./data.json', { cache: 'no-store' });
-  const d = await res.json();
-
-  const scopeSelect = document.getElementById('scopeSelect');
-  const valid = ['all', 'work', 'personal', 'general'];
-  const scope = valid.includes(parseScopeFromUrl()) ? parseScopeFromUrl() : 'all';
-  if (scopeSelect) scopeSelect.value = scope;
-
-  const updatedIso = d.updatedAtIso || null;
-  const nextIso = d.nextEstimatedUpdateAtIso || null;
-  const updatedText = updatedIso ? `${formatRelative(updatedIso)} · ${formatAbsolute(updatedIso, d.timezone)}` : compactTimeText(d.updatedAt || 'n/a', d.timezone);
-  const nextText = nextIso ? `${formatRelative(nextIso)} · ${formatAbsolute(nextIso, d.timezone)}` : compactTimeText(d.nextEstimatedUpdateAt || 'n/a', d.timezone);
-
-  const metaEl = document.getElementById('meta');
-  if (metaEl) metaEl.textContent = `Act: ${updatedText} · Próx: ${nextText} · Freq ${d.refreshEveryMinutes || 'n/a'}m · ${d.timezone || 'ART'}`;
-
-  const ql = document.getElementById('quicklinks');
-  if (ql) {
-    ql.innerHTML = '';
-    (d.quickLinks || []).slice(0, 4).forEach(l => {
-      const a = document.createElement('a');
-      a.href = l.url;
-      a.target = '_blank';
-      a.rel = 'noreferrer';
-      a.textContent = l.label;
-      ql.appendChild(a);
-    });
+  let light = 'green';
+  let label = 'VERDE';
+  if (mins !== null && mins < 0) {
+    light = 'red';
+    label = 'ROJO';
+  } else if (mins !== null && mins > 15) {
+    light = 'yellow';
+    label = 'AMARILLO';
   }
 
-  const na = d.nextAction || {};
-  const nextItems = [
-    na.recommended || 'Sin recomendación explícita (fallback operativo)',
-    `Prioridad ${na.priority || 'P2'} · ${na.source || 'SISTEMA'}`,
-    `ETA ${na.etaMinutes || 10}m · Conf ${na.confidence ?? 'n/a'}`,
-    ...getEvidence(d)
-  ].map(x => compactTimeText(x, d.timezone)).slice(0, 5);
+  const roadmapNext = (data.personaRoadmap || []).filter(x => x.includes('Next')).slice(0, 2);
 
-  renderList('nextaction', nextItems, {
-    classFor: classForStatus,
-    maxLine: 110
-  });
+  return {
+    light,
+    label,
+    headline: mins === null ? 'Sin ETA confiable' : `Ventana operativa: ${mins} min`,
+    items: [
+      `Próxima actualización: ${fmtDate(nextUpdate, data.timezone || TZ_FALLBACK)}`,
+      ...roadmapNext,
+      `Refresh objetivo: cada ${data.refreshEveryMinutes || 'n/a'} min`
+    ].slice(0, 4)
+  };
+}
 
-  const sys = [
-    `NEXT ${d.system?.nextActive ?? 'n/a'}/3`,
-    `BLOCKED ${d.system?.blocked ?? 'n/a'}`,
-    `WAITING ${d.system?.waiting ?? 'n/a'}`
+function pickRisks(data) {
+  const blocked = Number(data.system?.blocked ?? 0);
+  const waiting = Number(data.system?.waiting ?? 0);
+  const staleBuilder = (data.agentLive || []).find(x => /stale\s+builder/i.test(x));
+
+  let light = 'green';
+  let label = 'VERDE';
+  if (blocked > 0) {
+    light = 'red';
+    label = 'ROJO';
+  } else if (waiting > 0 || staleBuilder) {
+    light = 'yellow';
+    label = 'AMARILLO';
+  }
+
+  const riskItems = [
+    blocked > 0 ? `Bloqueos activos: ${blocked}` : 'Bloqueos activos: 0',
+    waiting > 0 ? `Elementos en espera: ${waiting}` : 'Elementos en espera: 0',
+    staleBuilder || 'Señal de agentes sin stale crítico',
+    (data.bridgeControl || []).find(x => x.toLowerCase().includes('estado:')) || 'Bridge status: n/a'
   ];
 
-  renderList('system', sys, {
-    classFor: classForStatus,
-    maxLine: 60
-  });
-
-  const renderScopeAndOps = (selectedScope) => {
-    renderList(
-      'scopeview',
-      getScopeStructure(d, selectedScope).map(x => compactTimeText(x, d.timezone)),
-      { classFor: classForStatus, maxLine: 96 }
-    );
-
-    renderList('opsfeed', getOpsUnified(d, selectedScope), {
-      classFor: classForStatus,
-      maxLine: 100
-    });
+  return {
+    light,
+    label,
+    headline: blocked > 0 ? 'Atacar bloqueos primero' : 'Riesgo bajo control',
+    items: riskItems
   };
+}
 
-  renderScopeAndOps(scope);
+function paint(blockId, lightId, headlineId, listId, payload) {
+  const light = document.getElementById(lightId);
+  const headline = document.getElementById(headlineId);
+  const list = document.getElementById(listId);
+  const block = document.getElementById(blockId);
 
-  if (scopeSelect) {
-    scopeSelect.addEventListener('change', (e) => {
-      const selected = e.target.value;
-      setScopeInUrl(selected);
-      renderScopeAndOps(selected);
+  if (light) {
+    light.className = `light ${payload.light}`;
+    light.textContent = payload.label;
+  }
+
+  if (headline) headline.textContent = payload.headline;
+
+  if (list) {
+    list.innerHTML = '';
+    payload.items.forEach((item, idx) => {
+      const li = document.createElement('li');
+      li.textContent = item;
+      if (idx > 1) li.classList.add('dim');
+      list.appendChild(li);
     });
+  }
+
+  if (block) block.dataset.state = payload.light;
+}
+
+async function init() {
+  const meta = document.getElementById('meta');
+
+  try {
+    const res = await fetch('./data.json', { cache: 'no-store' });
+    const data = await res.json();
+
+    const now = pickNow(data);
+    const next = pickNext15(data);
+    const risks = pickRisks(data);
+
+    paint('block-now', 'light-now', 'now-headline', 'now-list', now);
+    paint('block-next', 'light-next', 'next-headline', 'next-list', next);
+    paint('block-risks', 'light-risks', 'risks-headline', 'risks-list', risks);
+
+    if (meta) {
+      const ts = fmtDate(data.updatedAtIso || data.updatedAt, data.timezone || TZ_FALLBACK);
+      meta.textContent = `Una pantalla · 3 bloques · última señal ${ts}`;
+    }
+  } catch (err) {
+    if (meta) meta.textContent = `Error cargando data.json: ${err.message}`;
   }
 }
 
-load().catch(err => {
-  const metaEl = document.getElementById('meta');
-  if (metaEl) metaEl.textContent = `Error cargando data.json: ${err.message}`;
-  console.error(err);
-});
+init();
