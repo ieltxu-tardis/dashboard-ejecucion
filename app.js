@@ -17,11 +17,11 @@ function formatRelative(iso) {
   const abs = Math.abs(diffMs);
   const min = Math.round(abs / 60000);
   if (min < 1) return diffMs < 0 ? 'hace instantes' : 'en instantes';
-  if (min < 60) return diffMs < 0 ? `hace ${min} min` : `en ${min} min`;
+  if (min < 60) return diffMs < 0 ? `hace ${min}m` : `en ${min}m`;
   const h = Math.round(min / 60);
-  if (h < 24) return diffMs < 0 ? `hace ${h} h` : `en ${h} h`;
+  if (h < 24) return diffMs < 0 ? `hace ${h}h` : `en ${h}h`;
   const d = Math.round(h / 24);
-  return diffMs < 0 ? `hace ${d} d` : `en ${d} d`;
+  return diffMs < 0 ? `hace ${d}d` : `en ${d}d`;
 }
 
 function formatAbsolute(iso, tz = 'America/Argentina/Buenos_Aires') {
@@ -30,46 +30,76 @@ function formatAbsolute(iso, tz = 'America/Argentina/Buenos_Aires') {
   if (Number.isNaN(dt.getTime())) return 'n/a';
   return new Intl.DateTimeFormat('es-AR', {
     timeZone: tz,
-    weekday: 'short',
     day: '2-digit',
-    month: 'short',
+    month: '2-digit',
     hour: '2-digit',
-    minute: '2-digit'
-  }).format(dt) + ' ART';
+    minute: '2-digit',
+    hour12: false
+  }).format(dt).replace(',', '') + ' ART';
+}
+
+function compactTimeText(text, tz = 'America/Argentina/Buenos_Aires') {
+  if (!text) return text;
+  return String(text)
+    .replace(/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+\-]\d{2}:?\d{2})?/g, (m) => formatAbsolute(m, tz))
+    .replace(/\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}(?::\d{2})?\s*ART/g, (m) => {
+      const isoLike = m.replace(' ART', '').replace(' ', 'T') + '-03:00';
+      return formatAbsolute(isoLike, tz);
+    });
+}
+
+function limitLine(text, max = 92) {
+  const t = String(text || '');
+  return t.length > max ? `${t.slice(0, max - 1)}…` : t;
+}
+
+function classForStatus(txt) {
+  const t = (txt || '').toLowerCase();
+  if (t.includes('🔴') || t.includes('blocked') || t.includes('down') || t.includes('error')) return 'bad';
+  if (t.includes('🟡') || t.includes('stale') || t.includes('pending') || t.includes('waiting') || t.includes('p1')) return 'warn';
+  return 'ok';
 }
 
 function renderList(id, items, opts = {}) {
   const ul = document.querySelector(`#${id} ul`);
+  if (!ul) return;
   ul.innerHTML = '';
   const safeItems = Array.isArray(items) ? items : [];
   safeItems.forEach(item => {
     const li = document.createElement('li');
-    li.textContent = item;
-    if (opts.classFor) li.className = opts.classFor(item) || '';
+    li.textContent = limitLine(item, opts.maxLine || 96);
+    li.className = opts.classFor ? (opts.classFor(item) || '') : '';
     ul.appendChild(li);
   });
 }
 
 function getScopeStructure(d, scope) {
-  if (d.structureByScope && Array.isArray(d.structureByScope[scope])) return d.structureByScope[scope];
-  if (d.structureNav && Array.isArray(d.structureNav)) {
-    if (scope === 'all') return d.structureNav;
-    return d.structureNav.filter(x => x.toLowerCase().includes(`/${scope}/`) || x.toLowerCase().includes(`${scope}`));
-  }
-  if (d.structureTree && Array.isArray(d.structureTree)) {
-    if (scope === 'all') return d.structureTree;
-    return d.structureTree.filter(x => x.toLowerCase().includes(`${scope}/`) || x.toLowerCase().includes(` ${scope}/`));
-  }
-  return ['Sin estructura disponible para este scope'];
+  const raw = d.structureByScope?.[scope] || d.structureNav || d.structureTree || [];
+  const base = Array.isArray(raw) ? raw : ['Sin estructura'];
+  if (scope === 'all') return base.slice(0, 6);
+  return base
+    .filter(x => String(x).toLowerCase().includes(scope))
+    .slice(0, 6);
 }
 
-function getScopeChangelog(d, scope) {
-  if (d.changelogByScope && Array.isArray(d.changelogByScope[scope])) return d.changelogByScope[scope];
-  if (d.liveOps && Array.isArray(d.liveOps)) {
-    const base = d.liveOps.slice(0, 5);
-    return scope === 'all' ? base : base.map(x => `[${scope}] ${x}`);
-  }
-  return ['Sin changelog disponible'];
+function getOpsUnified(d, scope) {
+  const fromScope = (d.changelogByScope?.[scope] || []).map(x => `Scope: ${x}`);
+  const fromLive = (d.liveOps || []).map(x => `Ops: ${x}`);
+  const fromStatus = (d.statusBoard || []).map(x => `Estado: ${x}`);
+
+  const merged = [...fromScope, ...fromLive, ...fromStatus]
+    .map(x => compactTimeText(x, d.timezone))
+    .filter(Boolean);
+
+  return [...new Set(merged)].slice(0, 8);
+}
+
+function getEvidence(d) {
+  const ev = [];
+  if (Array.isArray(d.statusBoard) && d.statusBoard[0]) ev.push(`Evidencia: ${d.statusBoard[0]}`);
+  if (Array.isArray(d.liveOps) && d.liveOps[2]) ev.push(`Evidencia: ${d.liveOps[2]}`);
+  if (!ev.length) ev.push('Evidencia: sin señal explícita en data');
+  return ev.slice(0, 2);
 }
 
 async function load() {
@@ -77,58 +107,71 @@ async function load() {
   const d = await res.json();
 
   const scopeSelect = document.getElementById('scopeSelect');
-  const initialScope = parseScopeFromUrl();
   const valid = ['all', 'work', 'personal', 'general'];
-  const scope = valid.includes(initialScope) ? initialScope : 'all';
+  const scope = valid.includes(parseScopeFromUrl()) ? parseScopeFromUrl() : 'all';
   scopeSelect.value = scope;
 
-  const nextIso = d.nextEstimatedUpdateAtIso || null;
   const updatedIso = d.updatedAtIso || null;
+  const nextIso = d.nextEstimatedUpdateAtIso || null;
+  const updatedText = updatedIso ? `${formatRelative(updatedIso)} · ${formatAbsolute(updatedIso, d.timezone)}` : compactTimeText(d.updatedAt || 'n/a', d.timezone);
+  const nextText = nextIso ? `${formatRelative(nextIso)} · ${formatAbsolute(nextIso, d.timezone)}` : compactTimeText(d.nextEstimatedUpdateAt || 'n/a', d.timezone);
 
-  const updatedHuman = updatedIso
-    ? `${formatRelative(updatedIso)} (${formatAbsolute(updatedIso, d.timezone)})`
-    : (d.updatedAt || 'n/a');
-
-  const nextHuman = nextIso
-    ? `${formatRelative(nextIso)} (${formatAbsolute(nextIso, d.timezone)})`
-    : (d.nextEstimatedUpdateAt || 'n/a');
-
-  const freq = d.refreshEveryMinutes ? ` · Frecuencia: ${d.refreshEveryMinutes} min` : '';
-  document.getElementById('meta').textContent = `Actualizado: ${updatedHuman} · Próx update: ${nextHuman}${freq} · Zona: ${d.timezone || 'ART'}`;
+  document.getElementById('meta').textContent = `Act: ${updatedText} · Próx: ${nextText} · Freq ${d.refreshEveryMinutes || 'n/a'}m · ${d.timezone || 'ART'}`;
 
   const ql = document.getElementById('quicklinks');
   ql.innerHTML = '';
-  (d.quickLinks || []).forEach(l => {
+  (d.quickLinks || []).slice(0, 4).forEach(l => {
     const a = document.createElement('a');
-    a.href = l.url; a.target = '_blank'; a.rel = 'noreferrer'; a.textContent = l.label;
+    a.href = l.url;
+    a.target = '_blank';
+    a.rel = 'noreferrer';
+    a.textContent = l.label;
     ql.appendChild(a);
   });
 
   const na = d.nextAction || {};
-  renderList('nextaction', [
-    `${na.recommended || 'Sin recomendación'}`,
-    `Prioridad: ${na.priority || 'P2'} · Fuente: ${na.source || 'FALLBACK'}`,
-    `ETA: ${na.etaMinutes || 10} min · Confianza: ${na.confidence ?? 'n/a'}`,
-    `Motivo: ${na.reason || 'n/a'}`
-  ], {
-    classFor: (txt) => txt.includes('Prioridad: P0') ? 'warn' : 'ok'
+  const nextItems = [
+    na.recommended || 'Sin recomendación explícita (fallback operativo)',
+    `Prioridad ${na.priority || 'P2'} · ${na.source || 'SISTEMA'}`,
+    `ETA ${na.etaMinutes || 10}m · Conf ${na.confidence ?? 'n/a'}`,
+    ...getEvidence(d)
+  ].map(x => compactTimeText(x, d.timezone)).slice(0, 5);
+
+  renderList('nextaction', nextItems, {
+    classFor: classForStatus,
+    maxLine: 110
   });
 
-  renderList('system', [
-    `NEXT activos: ${d.system?.nextActive ?? 'n/a'} / 3`,
-    `BLOCKED: ${d.system?.blocked ?? 'n/a'}`,
-    `WAITING: ${d.system?.waiting ?? 'n/a'}`
-  ]);
+  const sys = [
+    `NEXT ${d.system?.nextActive ?? 'n/a'}/3`,
+    `BLOCKED ${d.system?.blocked ?? 'n/a'}`,
+    `WAITING ${d.system?.waiting ?? 'n/a'}`
+  ];
 
-  renderList('scopeview', getScopeStructure(d, scope));
-  renderList('scopechangelog', getScopeChangelog(d, scope));
-  renderList('liveops', d.liveOps || []);
+  renderList('system', sys, {
+    classFor: classForStatus,
+    maxLine: 60
+  });
+
+  const renderScopeAndOps = (selectedScope) => {
+    renderList(
+      'scopeview',
+      getScopeStructure(d, selectedScope).map(x => compactTimeText(x, d.timezone)),
+      { classFor: classForStatus, maxLine: 96 }
+    );
+
+    renderList('opsfeed', getOpsUnified(d, selectedScope), {
+      classFor: classForStatus,
+      maxLine: 100
+    });
+  };
+
+  renderScopeAndOps(scope);
 
   scopeSelect.addEventListener('change', (e) => {
     const selected = e.target.value;
     setScopeInUrl(selected);
-    renderList('scopeview', getScopeStructure(d, selected));
-    renderList('scopechangelog', getScopeChangelog(d, selected));
+    renderScopeAndOps(selected);
   });
 }
 
