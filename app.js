@@ -109,25 +109,28 @@ async function load() {
   const scopeSelect = document.getElementById('scopeSelect');
   const valid = ['all', 'work', 'personal', 'general'];
   const scope = valid.includes(parseScopeFromUrl()) ? parseScopeFromUrl() : 'all';
-  scopeSelect.value = scope;
+  if (scopeSelect) scopeSelect.value = scope;
 
   const updatedIso = d.updatedAtIso || null;
   const nextIso = d.nextEstimatedUpdateAtIso || null;
   const updatedText = updatedIso ? `${formatRelative(updatedIso)} · ${formatAbsolute(updatedIso, d.timezone)}` : compactTimeText(d.updatedAt || 'n/a', d.timezone);
   const nextText = nextIso ? `${formatRelative(nextIso)} · ${formatAbsolute(nextIso, d.timezone)}` : compactTimeText(d.nextEstimatedUpdateAt || 'n/a', d.timezone);
 
-  document.getElementById('meta').textContent = `Act: ${updatedText} · Próx: ${nextText} · Freq ${d.refreshEveryMinutes || 'n/a'}m · ${d.timezone || 'ART'}`;
+  const metaEl = document.getElementById('meta');
+  if (metaEl) metaEl.textContent = `Act: ${updatedText} · Próx: ${nextText} · Freq ${d.refreshEveryMinutes || 'n/a'}m · ${d.timezone || 'ART'}`;
 
   const ql = document.getElementById('quicklinks');
-  ql.innerHTML = '';
-  (d.quickLinks || []).slice(0, 4).forEach(l => {
-    const a = document.createElement('a');
-    a.href = l.url;
-    a.target = '_blank';
-    a.rel = 'noreferrer';
-    a.textContent = l.label;
-    ql.appendChild(a);
-  });
+  if (ql) {
+    ql.innerHTML = '';
+    (d.quickLinks || []).slice(0, 4).forEach(l => {
+      const a = document.createElement('a');
+      a.href = l.url;
+      a.target = '_blank';
+      a.rel = 'noreferrer';
+      a.textContent = l.label;
+      ql.appendChild(a);
+    });
+  }
 
   const na = d.nextAction || {};
   const nextItems = [
@@ -168,13 +171,17 @@ async function load() {
 
   renderScopeAndOps(scope);
 
-  scopeSelect.addEventListener('change', (e) => {
-    const selected = e.target.value;
-    setScopeInUrl(selected);
-    renderScopeAndOps(selected);
-  });
+  if (scopeSelect) {
+    scopeSelect.addEventListener('change', (e) => {
+      const selected = e.target.value;
+      setScopeInUrl(selected);
+      renderScopeAndOps(selected);
+    });
+  }
 }
 
 load().catch(err => {
-  document.getElementById('meta').textContent = `Error cargando data.json: ${err.message}`;
+  const metaEl = document.getElementById('meta');
+  if (metaEl) metaEl.textContent = `Error cargando data.json: ${err.message}`;
+  console.error(err);
 });
