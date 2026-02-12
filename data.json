@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-02-12 04:15 ART",
+  "updatedAt": "2026-02-12 05:15 ART",
   "timezone": "America/Argentina/Buenos_Aires",
   "quickLinks": [
     {
@@ -93,23 +93,23 @@
   ],
   "liveOps": [
     "Frecuencia refresh: cada 60 min",
-    "Próxima actualización estimada: 2026-02-12 05:15 ART",
+    "Próxima actualización estimada: 2026-02-12 06:15 ART",
     "Último commit local: a0acf1f chore: auto-refresh dashboard",
-    "Cambios sin commit (workspace): 41",
+    "Cambios sin commit (workspace): 42",
     "Tareas Tardis pendientes: 7",
-    "Última actualización efectiva: 2026-02-12 04:15 ART"
+    "Última actualización efectiva: 2026-02-12 05:15 ART"
   ],
-  "updatedAtIso": "2026-02-12T04:15:45.504109-03:00",
+  "updatedAtIso": "2026-02-12T05:15:45.742903-03:00",
   "refreshEveryMinutes": 60,
-  "nextEstimatedUpdateAt": "2026-02-12 05:15 ART",
+  "nextEstimatedUpdateAt": "2026-02-12 06:15 ART",
   "agentLive": [
-    "🟢 running tardis · hace 0m · 04:15 ART · ctx 42.2%",
-    "⚪ stale builder · hace 136m · 01:59 ART · ctx 100.0%",
-    "⚪ scout · sin sesión reciente · n/a"
+    "⚪ tardis · tracker unavailable",
+    "⚪ builder · tracker unavailable",
+    "⚪ scout · tracker unavailable"
   ],
   "tokenControl": [
     "Plan: pro ($0.00)",
-    "Consumo dedup 24h: 909133",
+    "Consumo dedup 24h: 953367",
     "Headroom 5h: 93% libre (7% usado)",
     "Headroom Day: 90% libre (10% usado)",
     "Top consumidor: agent:main:discord:channel:1470658609997156536 · 272000 tokens",
@@ -120,7 +120,7 @@
     "Estado: stale",
     "Último import: import-20260211-081708.log",
     "Último update sandbox: 2026-02-11T09:09:01.816670+00:00",
-    "Stale (horas): 22.12",
+    "Stale (horas): 23.12",
     "SHA: 0eb025a4d0026d0876c65b6dabb5bac8146582b5dde08ce31ed48bb424a724cd",
     "Acción sugerida: ejecutar bridge pull + validar origen Obsidian"
   ],
@@ -136,7 +136,7 @@
         "/root/.openclaw/workspace/dashboard",
         "/root/.openclaw/workspace/scripts/update_dashboard.py"
       ],
-      "lastChangedAt": "2026-02-12T07:16:17.461023+00:00",
+      "lastChangedAt": "2026-02-12T08:16:17.312508+00:00",
       "healthy": true,
       "missingPaths": 0
     },
@@ -199,7 +199,7 @@
     }
   ],
   "structureNav": [
-    "dashboard · last=2026-02-12T07:16:17.461023+00:00 · healthy=True",
+    "dashboard · last=2026-02-12T08:16:17.312508+00:00 · healthy=True",
     "reports-radar · last=2026-02-12T07:14:20.947638+00:00 · healthy=True",
     "tardis-core · last=2026-02-12T07:13:10.558805+00:00 · healthy=True",
     "bridge-obsidian · last=2026-02-12T05:47:29.107541+00:00 · healthy=True",
