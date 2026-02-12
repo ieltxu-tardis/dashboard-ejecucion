@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-02-12 01:29 ART",
+  "updatedAt": "2026-02-12 01:46 ART",
   "timezone": "America/Argentina/Buenos_Aires",
   "quickLinks": [
     {
@@ -93,26 +93,26 @@
   ],
   "liveOps": [
     "Frecuencia refresh: cada 60 min",
-    "Próxima actualización estimada: 2026-02-12 02:29 ART",
+    "Próxima actualización estimada: 2026-02-12 02:46 ART",
     "Último commit local: a0acf1f chore: auto-refresh dashboard",
-    "Cambios sin commit (workspace): 28",
+    "Cambios sin commit (workspace): 30",
     "Tareas Tardis pendientes: 7",
-    "Última actualización efectiva: 2026-02-12 01:29 ART"
+    "Última actualización efectiva: 2026-02-12 01:46 ART"
   ],
-  "updatedAtIso": "2026-02-12T01:29:32.628329-03:00",
+  "updatedAtIso": "2026-02-12T01:46:29.281590-03:00",
   "refreshEveryMinutes": 60,
-  "nextEstimatedUpdateAt": "2026-02-12 02:29 ART",
+  "nextEstimatedUpdateAt": "2026-02-12 02:46 ART",
   "agentLive": [
-    "🟢 running tardis · hace 1m · 01:28 ART · ctx 100.0%",
-    "⚪ builder · sin sesión reciente · n/a",
+    "🟢 running tardis · hace 1m · 01:45 ART · ctx 76.6%",
+    "🟢 running builder · hace 1m · 01:45 ART · ctx 100.0%",
     "⚪ scout · sin sesión reciente · n/a"
   ],
   "tokenControl": [
     "Plan: pro ($0.00)",
-    "Consumo dedup 24h: 1195646",
+    "Consumo dedup 24h: 1255071",
     "Headroom 5h: 97% libre (3% usado)",
     "Headroom Day: 92% libre (8% usado)",
-    "Top consumidor: agent:main:discord:channel:1470141833551155260 · 272000 tokens",
+    "Top consumidor: agent:main:discord:channel:1470658609997156536 · 272000 tokens",
     "Daily Brief ROI: runs24h=2 · avgTotal=229323 · avgOut=2708 · eff=0.0118",
     "Recomendación: optimizar moderado (menos longitud y foco)"
   ],
@@ -120,13 +120,13 @@
     "Estado: stale",
     "Último import: import-20260211-081708.log",
     "Último update sandbox: 2026-02-11T09:09:01.816670+00:00",
-    "Stale (horas): 19.35",
+    "Stale (horas): 19.63",
     "SHA: 0eb025a4d0026d0876c65b6dabb5bac8146582b5dde08ce31ed48bb424a724cd",
     "Acción sugerida: ejecutar bridge pull + validar origen Obsidian"
   ],
   "statusBoard": [
-    "tardis: WORKING · unificar dashboard a fuente única (status+bridge+tokens+scopes) · plan=Control Tower Foundation · checkpoint=2026-02-12T04:27:00-03:00",
-    "builder: IDLE · sin tarea activa · plan=n/a · checkpoint=None",
+    "tardis: WORKING · orquestar refactor UX dashboard + consolidar estructura visual · plan=Control Tower Foundation · checkpoint=2026-02-12T04:45:00-03:00",
+    "builder: WORKING · refactor UX visual: jerarquía, legibilidad de fechas/horas, layout limpio · plan=Dashboard UX Rescue · checkpoint=2026-02-12T04:45:00-03:00",
     "scout: IDLE · sin tarea activa · plan=n/a · checkpoint=None"
   ],
   "structureScopes": [
@@ -136,7 +136,7 @@
         "/root/.openclaw/workspace/dashboard",
         "/root/.openclaw/workspace/scripts/update_dashboard.py"
       ],
-      "lastChangedAt": "2026-02-12T04:30:06.413861+00:00",
+      "lastChangedAt": "2026-02-12T04:46:58.931969+00:00",
       "healthy": true,
       "missingPaths": 0
     },
@@ -145,7 +145,7 @@
       "paths": [
         "/root/.openclaw/workspace/ops/agents"
       ],
-      "lastChangedAt": "2026-02-12T04:29:28.847380+00:00",
+      "lastChangedAt": "2026-02-12T04:45:26.221917+00:00",
       "healthy": true,
       "missingPaths": 0
     },
@@ -199,8 +199,8 @@
     }
   ],
   "structureNav": [
-    "dashboard · last=2026-02-12T04:30:06.413861+00:00 · healthy=True",
-    "ops-agents · last=2026-02-12T04:29:28.847380+00:00 · healthy=True",
+    "dashboard · last=2026-02-12T04:46:58.931969+00:00 · healthy=True",
+    "ops-agents · last=2026-02-12T04:45:26.221917+00:00 · healthy=True",
     "tardis-core · last=2026-02-12T01:24:50.396373+00:00 · healthy=True",
     "reports-radar · last=2026-02-12T01:16:50.878441+00:00 · healthy=True",
     "bridge-obsidian · last=2026-02-11T22:17:08.719597+00:00 · healthy=True",

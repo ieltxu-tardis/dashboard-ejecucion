@@ -2,9 +2,10 @@ async function load(){
   const res = await fetch('./data.json', {cache:'no-store'});
   const d = await res.json();
 
-  const nextEta = d.nextEstimatedUpdateAt ? ` · Próx update: ${d.nextEstimatedUpdateAt}` : '';
-  const freq = d.refreshEveryMinutes ? ` · Frecuencia: ${d.refreshEveryMinutes} min` : '';
-  document.getElementById('meta').textContent = `Actualizado: ${d.updatedAt}${nextEta}${freq} · Zona: ${d.timezone}`;
+  const updated = formatDateSmart(d.updatedAtIso, d.updatedAt);
+  const nextEta = d.nextEstimatedUpdateAt ? ` · Próxima actualización: ${d.nextEstimatedUpdateAt}` : '';
+  const freq = d.refreshEveryMinutes ? ` · Frecuencia: cada ${d.refreshEveryMinutes} min` : '';
+  document.getElementById('meta').textContent = `Última actualización: ${updated}${nextEta}${freq} · Zona: ${d.timezone}`;
 
   const ql = document.getElementById('quicklinks');
   ql.innerHTML = '';
@@ -48,6 +49,7 @@ async function load(){
 
 function renderList(id, items, opts={}){
   const ul = document.querySelector(`#${id} ul`);
+  if(!ul) return;
   ul.innerHTML = '';
   items.forEach(item => {
     const li = document.createElement('li');
@@ -55,6 +57,20 @@ function renderList(id, items, opts={}){
     if(opts.classFor) li.className = opts.classFor(item) || '';
     ul.appendChild(li);
   });
+}
+
+function formatDateSmart(iso, fallback){
+  if(!iso) return fallback || 'n/a';
+  const dt = new Date(iso);
+  if(Number.isNaN(dt.getTime())) return fallback || iso;
+  const now = new Date();
+  const diffMs = now - dt;
+  const diffMin = Math.round(diffMs / 60000);
+  if(diffMin < 1) return 'justo ahora';
+  if(diffMin < 60) return `hace ${diffMin} min`;
+  const diffH = Math.round(diffMin / 60);
+  if(diffH < 24) return `hace ${diffH} h`;
+  return fallback || dt.toLocaleString();
 }
 
 load().catch(err=>{
