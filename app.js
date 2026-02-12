@@ -37,7 +37,9 @@ async function load(){
   renderList('agentlive', d.agentLive || []);
   renderList('tokencontrol', d.tokenControl || []);
   renderList('bridgecontrol', d.bridgeControl || []);
+  renderList('statusboard', d.statusBoard || []);
   renderList('liveops', d.liveOps || []);
+  renderList('structurenav', d.structureNav || []);
   renderList('roadmap', d.personaRoadmap || []);
 
   const tree = document.querySelector('#structure .tree');
