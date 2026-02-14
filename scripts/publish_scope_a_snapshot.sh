@@ -2,18 +2,20 @@
 set -euo pipefail
 
 STATE_FILE="${1:-runtime/RUNTIME_STATE.json}"
+MARKER_CACHE_FILE="${2:-runtime/.scope_a_snapshot_marker}"
 
 if [[ ! -f "$STATE_FILE" ]]; then
   echo "NO_REPLY"
   exit 0
 fi
 
-python3 - "$STATE_FILE" <<'PY'
+python3 - "$STATE_FILE" "$MARKER_CACHE_FILE" <<'PY'
 import json
 import sys
 from pathlib import Path
 
 state_path = Path(sys.argv[1])
+marker_cache_path = Path(sys.argv[2])
 
 try:
     data = json.loads(state_path.read_text(encoding="utf-8"))
@@ -23,6 +25,17 @@ except Exception:
 
 marker = data.get("material_change_marker")
 if not marker:
+    print("NO_REPLY")
+    sys.exit(0)
+
+last_marker = ""
+if marker_cache_path.exists():
+    try:
+        last_marker = marker_cache_path.read_text(encoding="utf-8").strip()
+    except Exception:
+        last_marker = ""
+
+if marker == last_marker:
     print("NO_REPLY")
     sys.exit(0)
 
@@ -69,4 +82,9 @@ def render(section):
 print(f"SCOPE_A_SNAPSHOT marker={marker}")
 for sec in ["ACTIVE_NOW", "BLOCKED", "DONE", "NEXT_TRIGGER"]:
     render(sec)
+
+try:
+    marker_cache_path.write_text(str(marker), encoding="utf-8")
+except Exception:
+    pass
 PY

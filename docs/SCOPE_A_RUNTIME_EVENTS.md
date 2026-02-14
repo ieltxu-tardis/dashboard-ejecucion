@@ -92,3 +92,10 @@ Each emitted event should correspond to a real edit in `runtime/RUNTIME_STATE.js
 ## Anti-noise guard
 If no material runtime change occurred, do not emit to `#agent-feed`.
 Use `NO_REPLY` semantics in snapshot publishing to avoid duplicate chatter.
+
+## Runtime wiring (v1)
+- Emitter script: `scripts/emit_scope_a_runtime_event.sh`
+- Runtime tick entrypoint: `scripts/run_scope_a_runtime_cycle.sh`
+- Event outbox path: `runtime/outbox/agent_feed_event.txt`
+- Allowed events emitted by script: `STARTED`, `HEARTBEAT`, `BLOCKED`, `COMPLETED`
+- Emission policy: at most one event per runtime tick, only when diff vs last runtime cache is material.

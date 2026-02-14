@@ -29,6 +29,19 @@ Before posting to `#sistema`, verify:
 - Every `BLOCKED` item has a concrete `unblock_action`.
 - Every `NEXT_TRIGGER` item is actionable and assigned.
 
+## Runtime/Cron Wiring (v1)
+- Cron/runtime entrypoint: `scripts/run_scope_a_runtime_cycle.sh`
+- Snapshot producer: `scripts/publish_scope_a_snapshot.sh`
+- `#sistema` payload source is **only** the stdout of `publish_scope_a_snapshot.sh`.
+- `publish_scope_a_snapshot.sh` dedupes by `material_change_marker` against `runtime/.scope_a_snapshot_marker`.
+- If producer returns `NO_REPLY`, cycle emits no new `#sistema` payload.
+- Material snapshot payload is persisted at `runtime/outbox/sistema_snapshot.txt`.
+
+Example cron (every 5 min):
+```cron
+*/5 * * * * cd /root/.openclaw/workspace && scripts/run_scope_a_runtime_cycle.sh >> runtime/cron_scope_a.log 2>&1
+```
+
 ## Minimal Snapshot Template
 ```text
 #sistema snapshot

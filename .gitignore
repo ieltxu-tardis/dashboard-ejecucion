@@ -18,6 +18,10 @@ USER.md
 # Runtime memory (kept local by default)
 memory/
 MEMORY.md
+runtime/.scope_a_event_cache.json
+runtime/.scope_a_snapshot_marker
+runtime/outbox/
+runtime/cron_scope_a.log
 
 # OS
 .DS_Store
