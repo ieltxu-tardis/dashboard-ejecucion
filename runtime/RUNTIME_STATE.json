@@ -1,0 +1,41 @@
+{
+  "$schema_version": "1.0.0",
+  "description": "Runtime truth for Dashboard Scope A premium snapshots",
+  "generated_at": "2026-02-14T03:53:00Z",
+  "source_rev": "sample-rev",
+  "ACTIVE_NOW": [
+    {
+      "id": "A-001",
+      "owner": "builder",
+      "task": "Bootstrap dashboard scope A premium runtime foundation",
+      "started_at": "2026-02-14T03:53:00Z",
+      "evidence": "docs/DASHBOARD_A_PREMIUM_SPEC.md"
+    }
+  ],
+  "BLOCKED": [
+    {
+      "id": "B-001",
+      "owner": "main",
+      "blocked_by": "Final UI dashboard decision",
+      "since": "2026-02-14T00:00:00Z",
+      "unblock_action": "Confirm visual dashboard scope and owner"
+    }
+  ],
+  "DONE": [
+    {
+      "id": "D-001",
+      "owner": "builder",
+      "result": "Defined Scope A premium runtime spec",
+      "completed_at": "2026-02-14T03:53:00Z",
+      "evidence": "docs/DASHBOARD_A_PREMIUM_SPEC.md"
+    }
+  ],
+  "NEXT_TRIGGER": [
+    {
+      "id": "N-001",
+      "trigger_condition": "When runtime state changes materially",
+      "next_action": "Generate and post #sistema snapshot from RUNTIME_STATE.json",
+      "owner": "main"
+    }
+  ]
+}
