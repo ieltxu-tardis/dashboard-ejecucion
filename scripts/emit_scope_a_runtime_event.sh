@@ -21,6 +21,12 @@ cache_path = Path(sys.argv[2])
 def now_iso():
     return datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
 
+def compact(v, fallback="(none)"):
+    if v is None:
+        return fallback
+    s = str(v).strip()
+    return s if s else fallback
+
 try:
     current = json.loads(state_path.read_text(encoding="utf-8"))
 except Exception:
@@ -50,32 +56,32 @@ prev_blocked = by_id(prev.get("BLOCKED", []))
 curr_done = by_id(current.get("DONE", []))
 prev_done = by_id(prev.get("DONE", []))
 
-# Precedence keeps output to one event per tick.
 # 1) COMPLETED
 new_done_ids = [i for i in curr_done if i not in prev_done]
 if new_done_ids:
-    tid = max(
-        new_done_ids,
-        key=lambda x: str(curr_done.get(x, {}).get("completed_at", ""))
-    )
+    tid = max(new_done_ids, key=lambda x: str(curr_done.get(x, {}).get("completed_at", "")))
     item = curr_done[tid]
-    payload = (
-        f"event=COMPLETED task_id={tid} result={item.get('result','(no result)')} "
-        f"completed_at={item.get('completed_at', now_iso())} evidence_path={item.get('evidence','(none)')}"
-    )
+    payload = "\n".join([
+        f"✅ COMPLETED · {tid}",
+        f"Result: {compact(item.get('result'))}",
+        f"Completed: {compact(item.get('completed_at'), now_iso())}",
+        f"Evidence: {compact(item.get('evidence'))}",
+    ])
     print(payload)
     cache_path.write_text(json.dumps(current, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     raise SystemExit(0)
 
-# 2) BLOCKED (new blocker or changed blocker details)
+# 2) BLOCKED
 for tid, item in curr_blocked.items():
     p = prev_blocked.get(tid)
     if p is None or p.get("blocked_by") != item.get("blocked_by") or p.get("unblock_action") != item.get("unblock_action"):
-        payload = (
-            f"event=BLOCKED task_id={tid} blocked_by={item.get('blocked_by','(unknown)')} "
-            f"since={item.get('since', now_iso())} unblock_action={item.get('unblock_action','(none)')} "
-            f"owner={item.get('owner','(unknown)')}"
-        )
+        payload = "\n".join([
+            f"⛔ BLOCKED · {tid}",
+            f"Owner: {compact(item.get('owner'), '(unknown)')}",
+            f"Why: {compact(item.get('blocked_by'), '(unknown)')}",
+            f"Since: {compact(item.get('since'), now_iso())}",
+            f"Unblock: {compact(item.get('unblock_action'))}",
+        ])
         print(payload)
         cache_path.write_text(json.dumps(current, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
         raise SystemExit(0)
@@ -85,15 +91,17 @@ new_active_ids = [i for i in curr_active if i not in prev_active]
 if new_active_ids:
     tid = new_active_ids[0]
     item = curr_active[tid]
-    payload = (
-        f"event=STARTED task_id={tid} owner={item.get('owner','(unknown)')} "
-        f"started_at={item.get('started_at', now_iso())} evidence_path={item.get('evidence','(none)')}"
-    )
+    payload = "\n".join([
+        f"▶️ STARTED · {tid}",
+        f"Owner: {compact(item.get('owner'), '(unknown)')}",
+        f"Started: {compact(item.get('started_at'), now_iso())}",
+        f"Evidence: {compact(item.get('evidence'))}",
+    ])
     print(payload)
     cache_path.write_text(json.dumps(current, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     raise SystemExit(0)
 
-# 4) HEARTBEAT on material active change only
+# 4) HEARTBEAT
 for tid, item in curr_active.items():
     p = prev_active.get(tid)
     if not p:
@@ -103,15 +111,16 @@ for tid, item in curr_active.items():
         if p.get(k) != item.get(k) and item.get(k) is not None:
             changed_fields.append(k)
     if changed_fields:
-        payload = (
-            f"event=HEARTBEAT task_id={tid} progress_delta={','.join(changed_fields)} "
-            f"evidence_path={item.get('evidence','(none)')} timestamp={now_iso()}"
-        )
+        payload = "\n".join([
+            f"💓 HEARTBEAT · {tid}",
+            f"Progress: {', '.join(changed_fields)}",
+            f"Evidence: {compact(item.get('evidence'))}",
+            f"Time: {now_iso()}",
+        ])
         print(payload)
         cache_path.write_text(json.dumps(current, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
         raise SystemExit(0)
 
-# No material event
 print("NO_EVENT")
 cache_path.write_text(json.dumps(current, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 PY

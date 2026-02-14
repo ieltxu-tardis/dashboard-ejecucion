@@ -1,17 +1,17 @@
 {
   "$schema_version": "1.0.0",
   "description": "Runtime truth for Dashboard Scope A premium snapshots",
-  "generated_at": "2026-02-14T04:07:00Z",
-  "source_rev": "scope-a-v1-finalize-pending-commit",
-  "material_change_marker": "scope-a-v1-runtime-wireup-2026-02-14T04:07:00Z",
+  "generated_at": "2026-02-14T04:17:00Z",
+  "source_rev": "scope-a-v1-message-style-polish",
+  "material_change_marker": "scope-a-v1-style-polish-2026-02-14T04:17:00Z",
   "ACTIVE_NOW": [],
   "BLOCKED": [
     {
       "id": "B-001",
       "owner": "main",
-      "blocked_by": "Channel transport integration pending for outbox delivery",
-      "since": "2026-02-14T04:07:00Z",
-      "unblock_action": "Connect runtime/outbox dispatcher to Discord channels #sistema and #agent-feed"
+      "blocked_by": "No automated dispatcher process is configured to deliver runtime/outbox files into Discord channels on each runtime tick",
+      "since": "2026-02-14T04:17:00Z",
+      "unblock_action": "Attach runtime tick to a real Discord delivery step (cron/service hook that posts runtime/outbox/sistema_snapshot.txt to #sistema and runtime/outbox/agent_feed_event.txt to #agent-feed)"
     }
   ],
   "DONE": [
@@ -28,6 +28,13 @@
       "result": "Finalized Scope A v1 runtime wiring for sistema snapshot and agent-feed runtime events",
       "completed_at": "2026-02-14T04:07:00Z",
       "evidence": "scripts/run_scope_a_runtime_cycle.sh"
+    },
+    {
+      "id": "D-003",
+      "owner": "builder",
+      "result": "Polished human-readable channel message style and removed machine key=value output format from channel payload scripts",
+      "completed_at": "2026-02-14T04:17:00Z",
+      "evidence": "docs/SCOPE_A_MESSAGE_STYLE.md, scripts/publish_scope_a_snapshot.sh, scripts/emit_scope_a_runtime_event.sh"
     }
   ],
   "NEXT_TRIGGER": [

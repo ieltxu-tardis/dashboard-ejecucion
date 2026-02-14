@@ -2,6 +2,8 @@
 
 Defines when Scope A should emit runtime events to `#agent-feed`.
 
+Style reference: `docs/SCOPE_A_MESSAGE_STYLE.md` (human-readable, compact, no key=value machine payloads for channel text).
+
 ## Channel
 - Destination: `#agent-feed`
 - Principle: emit only on **real execution state changes** (no timer-only noise).

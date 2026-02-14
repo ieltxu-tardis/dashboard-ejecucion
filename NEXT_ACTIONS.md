@@ -4,20 +4,20 @@
 - [ ] (ACTIVE) Ninguna tarea activa en Scope A v1 (última transición cerrada a DONE con evidencia)
 
 ## NEXT (Top 3)
-- [ ] (NEXT) Integrar dispatcher externo para enviar `runtime/outbox/sistema_snapshot.txt` a `#sistema`
-  - Resultado: publicación automática end-to-end conectada al runtime tick
-  - Primer paso: conectar outbox a transporte del canal
+- [ ] (NEXT) Conectar delivery automático real (servicio/cron) de `runtime/outbox/sistema_snapshot.txt` -> `#sistema`
+  - Resultado: publicación automática end-to-end en cada runtime tick
+  - Primer paso: registrar hook de ejecución que lea outbox y haga `message send` al canal destino
 
-- [ ] (NEXT) Integrar dispatcher externo para enviar `runtime/outbox/agent_feed_event.txt` a `#agent-feed`
-  - Resultado: eventos de ejecución llegan al canal sin romper anti-noise
-  - Primer paso: mapear archivo outbox a envío por canal
+- [ ] (NEXT) Conectar delivery automático real (servicio/cron) de `runtime/outbox/agent_feed_event.txt` -> `#agent-feed`
+  - Resultado: eventos event-driven llegan sin intervención manual
+  - Primer paso: mapear outbox + guardas de no-duplicado al transporte de Discord
 
 - [ ] (NEXT) Añadir prueba de regresión para diffs de `ACTIVE_NOW/BLOCKED/DONE`
   - Resultado: validación automática de reglas STARTED/HEARTBEAT/BLOCKED/COMPLETED
   - Primer paso: fixture previo/actual + asserts de evento esperado
 
 ## BLOCKED
-- [ ] (BLOCKED) Dependencia externa: falta conectar transporte de canal (outbox -> Discord) en runtime host
+- [ ] (BLOCKED) B-001: Falta dispatcher automatizado outbox -> Discord en host runtime (bloqueo concreto de integración operativa)
 
 ## DONE
 - [x] Bootstrap Scope A premium runtime foundation (2026-02-14)
@@ -31,3 +31,12 @@
   - `scripts/emit_scope_a_runtime_event.sh` (emite STARTED/HEARTBEAT/BLOCKED/COMPLETED sólo por cambios materiales)
   - `scripts/runtime_snapshot.md` (pipeline de `#sistema` cableado al output de `publish_scope_a_snapshot.sh`)
   - `docs/SCOPE_A_RUNTIME_EVENTS.md` (wiring de eventos y outbox)
+- [x] (DONE) Style polish + semantics unblock hardening (2026-02-14):
+  - `docs/SCOPE_A_MESSAGE_STYLE.md` creado con plantillas de alta calidad para `#sistema` y `#agent-feed`
+  - `scripts/publish_scope_a_snapshot.sh` actualizado a salida markdown compacta (sin `key=value`)
+  - `scripts/emit_scope_a_runtime_event.sh` actualizado a eventos legibles multilinea (sin `key=value`)
+  - `runtime/RUNTIME_STATE.json` actualizado: B-001 reescrito a bloqueo concreto real + D-003 agregado
+
+## NEXT TRIGGER
+- Trigger: cambio material en `runtime/RUNTIME_STATE.json`
+- Acción: ejecutar `scripts/run_scope_a_runtime_cycle.sh` y despachar outbox a canales

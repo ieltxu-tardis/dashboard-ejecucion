@@ -39,49 +39,77 @@ if marker == last_marker:
     print("NO_REPLY")
     sys.exit(0)
 
-def line_for(item, section):
-    if not isinstance(item, dict):
-        return f"- {item}"
-
-    if section == "ACTIVE_NOW":
-        ident = item.get("id", "?")
-        owner = item.get("owner", "?")
-        task = item.get("task", "(no task)")
-        return f"- [{ident}] {owner}: {task}"
-
-    if section == "BLOCKED":
-        ident = item.get("id", "?")
-        owner = item.get("owner", "?")
-        blocked_by = item.get("blocked_by", "(no blocker)")
-        return f"- [{ident}] {owner}: {blocked_by}"
-
-    if section == "DONE":
-        ident = item.get("id", "?")
-        owner = item.get("owner", "?")
-        result = item.get("result", "(no result)")
-        return f"- [{ident}] {owner}: {result}"
-
-    # NEXT_TRIGGER
-    ident = item.get("id", "?")
-    owner = item.get("owner", "?")
-    action = item.get("next_action", item.get("trigger_condition", "(no trigger)"))
-    return f"- [{ident}] {owner}: {action}"
+def compact(val, fallback="(none)"):
+    if val is None:
+        return fallback
+    s = str(val).strip()
+    return s if s else fallback
 
 
-def render(section):
-    val = data.get(section, [])
-    print(f"{section}:")
-    if isinstance(val, list) and val:
-        for i in val[:3]:
-            print(line_for(i, section))
-        if len(val) > 3:
-            print(f"- ... (+{len(val)-3} more)")
-    else:
-        print("- none")
+def section_lines(section_name, items):
+    out = []
+    if not isinstance(items, list) or not items:
+        return ["- none"]
 
-print(f"SCOPE_A_SNAPSHOT marker={marker}")
-for sec in ["ACTIVE_NOW", "BLOCKED", "DONE", "NEXT_TRIGGER"]:
-    render(sec)
+    for item in items[:3]:
+        if not isinstance(item, dict):
+            out.append(f"- {item}")
+            continue
+
+        ident = compact(item.get("id"), "?")
+        owner = compact(item.get("owner"), "?")
+
+        if section_name == "ACTIVE_NOW":
+            task = compact(item.get("task"), "(no task)")
+            out.append(f"- {ident} · {owner} — {task}")
+
+        elif section_name == "BLOCKED":
+            why = compact(item.get("blocked_by"), "(no blocker)")
+            unblock = compact(item.get("unblock_action"), "(none)")
+            out.append(f"- {ident} · {owner} — {why}")
+            out.append(f"  ↳ Unblock: {unblock}")
+
+        elif section_name == "DONE":
+            result = compact(item.get("result"), "(no result)")
+            evidence = compact(item.get("evidence"), "(none)")
+            out.append(f"- {ident} · {owner} — {result}")
+            out.append(f"  ↳ Evidence: {evidence}")
+
+        else:  # NEXT_TRIGGER
+            action = compact(item.get("next_action") or item.get("trigger_condition"), "(no trigger)")
+            cond = compact(item.get("trigger_condition"), "(none)")
+            out.append(f"- {ident} · {owner} — {action}")
+            out.append(f"  ↳ Condition: {cond}")
+
+    if len(items) > 3:
+        out.append(f"- … (+{len(items)-3} more)")
+
+    return out
+
+updated = compact(data.get("generated_at"), "(unknown)")
+
+print("## Scope A Runtime Snapshot")
+print(f"Updated: {updated} · Marker: {marker}")
+print()
+
+print("### Active now")
+for line in section_lines("ACTIVE_NOW", data.get("ACTIVE_NOW", [])):
+    print(line)
+print()
+
+print("### Blocked")
+for line in section_lines("BLOCKED", data.get("BLOCKED", [])):
+    print(line)
+print()
+
+print("### Done")
+for line in section_lines("DONE", data.get("DONE", [])):
+    print(line)
+print()
+
+print("### Next trigger")
+for line in section_lines("NEXT_TRIGGER", data.get("NEXT_TRIGGER", [])):
+    print(line)
 
 try:
     marker_cache_path.write_text(str(marker), encoding="utf-8")
