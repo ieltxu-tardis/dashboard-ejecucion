@@ -57,6 +57,11 @@ Extra rule for `validated_structured_extraction`:
 | timelab.capture_goal | time:write | no | no | low |
 | timelab.list_goals | time:read | no | no | low |
 | timelab.weekly_review | time:read (time:write when persist) | no | no | med |
+| financelab.import_preview_csv | docs:ingest | no | no | med |
+| financelab.list_transactions | finance:read | no | no | low |
+| financelab.spend_summary | finance:read | no | no | low |
+| financelab.commit_import | finance:write | yes | yes | high |
+| financelab.write_transaction | finance:write | yes | yes | high |
 
 ## Audit policy
 On every successful structured write:

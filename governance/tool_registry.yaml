@@ -136,3 +136,58 @@ tools:
     max_memory_mb: 192
     network_policy: none
     filesystem_policy: none
+
+  - name: financelab.import_preview_csv
+    scope: docs:ingest
+    input_schema: {type: object, required: [source_doc_id, mapping]}
+    output_schema: {type: object, required: [import_id, payload_hash, summary]}
+    requires_approval: false
+    cost_class: med
+    max_runtime_ms: 2000
+    max_memory_mb: 256
+    network_policy: none
+    filesystem_policy: none
+
+  - name: financelab.list_transactions
+    scope: finance:read
+    input_schema: {type: object}
+    output_schema: {type: object, required: [items]}
+    requires_approval: false
+    cost_class: low
+    max_runtime_ms: 800
+    max_memory_mb: 128
+    network_policy: none
+    filesystem_policy: none
+
+  - name: financelab.spend_summary
+    scope: finance:read
+    input_schema: {type: object}
+    output_schema: {type: object, required: [total, rows]}
+    requires_approval: false
+    cost_class: low
+    max_runtime_ms: 1000
+    max_memory_mb: 128
+    network_policy: none
+    filesystem_policy: none
+
+  - name: financelab.commit_import
+    scope: finance:write
+    input_schema: {type: object, required: [import_id]}
+    output_schema: {type: object, required: [status]}
+    requires_approval: true
+    cost_class: high
+    max_runtime_ms: 3000
+    max_memory_mb: 256
+    network_policy: none
+    filesystem_policy: none
+
+  - name: financelab.write_transaction
+    scope: finance:write
+    input_schema: {type: object, required: [ts, amount]}
+    output_schema: {type: object, required: [status]}
+    requires_approval: true
+    cost_class: high
+    max_runtime_ms: 1500
+    max_memory_mb: 256
+    network_policy: none
+    filesystem_policy: none

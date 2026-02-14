@@ -6,3 +6,7 @@ modules:
   - name: timelab
     enabled: false
     description: Tasks, goals, and weekly reviews.
+
+  - name: financelab
+    enabled: false
+    description: Finance import preview, commit with approvals, and summaries.

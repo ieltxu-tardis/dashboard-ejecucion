@@ -30,9 +30,13 @@
 - `APPROVAL_TTL_SECONDS` (default 900, i.e. 15m)
 - `APPROVALS_ADMIN_ACTOR` (default `admin-local`)
 
-### Capability modules (Phase 7/8)
-- `MODULES_ENABLED` comma-separated allowlist override (e.g. `idealab,timelab`)
+### Capability modules (Phase 7/8/9)
+- `MODULES_ENABLED` comma-separated allowlist override (e.g. `idealab,timelab,financelab`)
 - default module flags live in `modules/modules.yaml` (fail-closed recommended for new modules)
+
+### FinanceLab (Phase 9)
+- `FINANCE_DEFAULT_CURRENCY` (default `USD`)
+- `FINANCE_IMPORT_MAX_ROWS` (default `1000`)
 
 ## Notes
 - Keep metrics bound to localhost/internal network.

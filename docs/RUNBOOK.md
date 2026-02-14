@@ -78,6 +78,16 @@ PY
 2. Adjust env budgets only if justified.
 3. Re-test with `./scripts/test-governance.sh`.
 
+### Finance import flow (preview -> approval -> commit)
+1. Run preview (`financelab.import_preview_csv`) to create import and summary only.
+2. Run commit without approval; expect `pending_approval` + `approval_id`.
+3. Approve locally:
+```bash
+./scripts/approvals approve <approval_id> --reason "ok" --by "admin-local"
+```
+4. Re-run commit with `approval_id`.
+5. If commit retried, dedupe should keep counts stable (no duplicate rows).
+
 ### Safe mode active unexpectedly
 1. Check env flags (`SAFE_MODE_*`).
 2. Set to `0` and restart relevant processes.
