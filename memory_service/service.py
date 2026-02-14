@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import time
 from dataclasses import dataclass
 from typing import Protocol, Any
 
@@ -7,6 +8,7 @@ from .db import PostgresExec
 from .jobs import JobQueueService
 from .policy import WritePolicyEngine
 from .schemas import validate_document_write, validate_entity_write, validate_fact_write
+from observability.logging import log_event
 
 
 class IMemoryService(Protocol):
@@ -42,6 +44,13 @@ class PostgresMemoryService:
             schema_valid=schema_valid,
         )
         if not decision.allowed:
+            self.db.execute(
+                """
+                INSERT INTO observability_events(tenant_id, component, route, event_type, outcome, error_code, payload)
+                VALUES (%(tenant_id)s, 'memory', 'write', 'policy_denied', 'error', %(error_code)s, '{}'::jsonb);
+                """,
+                params={"tenant_id": payload.get("tenant_id"), "error_code": decision.reason},
+            )
             raise ValueError(f"write_denied:{decision.reason}")
 
     def _audit(self, *, tenant_id: str, actor_ref: str, action: str, target_type: str, target_ref: str, source: str, reason: str, confidence: float) -> None:
@@ -64,6 +73,7 @@ class PostgresMemoryService:
         )
 
     def write_document(self, payload: dict[str, Any]) -> dict[str, Any]:
+        started = time.time()
         validate_document_write(payload)
         self._policy_gate(payload, schema_valid=True)
 
@@ -107,6 +117,16 @@ class PostgresMemoryService:
                 enqueue_result = self.jobs.enqueue_embedding_job(tenant_id=payload["tenant_id"], doc_id=doc_id)
             except Exception:
                 enqueue_result = {"queued": False, "reason": "enqueue_failed"}
+
+        latency_ms = int((time.time() - started) * 1000)
+        self.db.execute(
+            """
+            INSERT INTO observability_events(tenant_id, component, route, event_type, outcome, latency_ms, payload)
+            VALUES (%(tenant_id)s, 'memory', 'write_document', 'request', '2xx', %(latency_ms)s, '{}'::jsonb);
+            """,
+            params={"tenant_id": payload["tenant_id"], "latency_ms": latency_ms},
+        )
+        log_event("info", "memory", "write_document_ok", tenant_id=payload["tenant_id"], latency_ms=latency_ms)
 
         return {"id": doc_id, "embedding_job": enqueue_result}
 
@@ -204,10 +224,11 @@ class PostgresMemoryService:
         )
 
     def semantic_search(self, tenant_id: str, query_embedding: list[float], top_k: int = 5) -> list[dict[str, Any]]:
+        started = time.time()
         if not query_embedding:
             return []
         vector = "[" + ",".join(str(float(x)) for x in query_embedding) + "]"
-        return self.db.fetchall_json(
+        results = self.db.fetchall_json(
             """
             SELECT e.id::text as embedding_id,
                    e.doc_id::text,
@@ -232,6 +253,17 @@ class PostgresMemoryService:
             """,
             params={"tenant_id": tenant_id, "vector": vector, "top_k": int(top_k)},
         )
+        latency_ms = int((time.time() - started) * 1000)
+        self.db.execute(
+            """
+            INSERT INTO observability_events(tenant_id, component, route, event_type, outcome, latency_ms, value_num, payload)
+            VALUES (%(tenant_id)s, 'memory', 'semantic_search', 'semantic_search', '2xx', %(latency_ms)s, %(hits)s,
+                    jsonb_build_object('top_k', %(top_k)s));
+            """,
+            params={"tenant_id": tenant_id, "latency_ms": latency_ms, "hits": float(len(results)), "top_k": int(top_k)},
+        )
+        log_event("info", "memory", "semantic_search", tenant_id=tenant_id, latency_ms=latency_ms, hits=len(results))
+        return results
 
 
 def get_default_tenant_id(service: PostgresMemoryService) -> str:

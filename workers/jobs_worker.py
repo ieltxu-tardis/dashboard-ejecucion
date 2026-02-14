@@ -177,7 +177,7 @@ def fetch_next_job(db: PostgresExec) -> dict | None:
     return rows[0] if rows else None
 
 
-def fail_job(db: PostgresExec, job: dict, err: str):
+def fail_job(db: PostgresExec, job: dict, err: str, duration_ms: int):
     attempts = int(job["attempts"]) + 1
     max_attempts = int(job.get("max_attempts") or MAX_RETRY)
     status = "failed" if not should_retry(attempts, max_attempts) else "queued"
@@ -201,11 +201,30 @@ def fail_job(db: PostgresExec, job: dict, err: str):
         },
     )
     record_run(db, job["tenant_id"], job["type"], status, err[:500])
+    db.execute(
+        """
+        INSERT INTO observability_events(tenant_id, component, route, event_type, outcome, job_type, error_code, latency_ms)
+        VALUES (%(tenant_id)s, 'worker', 'job_process', 'job_process', 'error', %(job_type)s, %(error_code)s, %(latency_ms)s);
+        """,
+        params={
+            "tenant_id": job["tenant_id"],
+            "job_type": job["type"],
+            "error_code": err[:120],
+            "latency_ms": duration_ms,
+        },
+    )
 
 
-def complete_job(db: PostgresExec, job: dict):
+def complete_job(db: PostgresExec, job: dict, duration_ms: int):
     db.execute("UPDATE jobs SET status='done', updated_at=NOW() WHERE id = %(job_id)s::uuid;", params={"job_id": job["id"]})
     record_run(db, job["tenant_id"], job["type"], "done", None)
+    db.execute(
+        """
+        INSERT INTO observability_events(tenant_id, component, route, event_type, outcome, job_type, latency_ms)
+        VALUES (%(tenant_id)s, 'worker', 'job_process', 'job_process', 'ok', %(job_type)s, %(latency_ms)s);
+        """,
+        params={"tenant_id": job["tenant_id"], "job_type": job["type"], "latency_ms": duration_ms},
+    )
 
 
 def process_job(db: PostgresExec, job: dict):
@@ -227,14 +246,17 @@ def main() -> int:
         if not job:
             time.sleep(POLL_SECONDS)
             continue
+        started = time.time()
         try:
             process_job(db, job)
-            complete_job(db, job)
-            log("job_done", job_id=job["id"], job_type=job["type"], tenant_id=job["tenant_id"])
+            duration_ms = int((time.time() - started) * 1000)
+            complete_job(db, job, duration_ms)
+            log("job_done", job_id=job["id"], job_type=job["type"], tenant_id=job["tenant_id"], latency_ms=duration_ms)
         except Exception as e:
+            duration_ms = int((time.time() - started) * 1000)
             err = f"{type(e).__name__}:{e}"
-            fail_job(db, job, err)
-            log("job_failed", job_id=job["id"], error=err)
+            fail_job(db, job, err, duration_ms)
+            log("job_failed", job_id=job["id"], error=err, latency_ms=duration_ms)
             traceback.print_exc()
 
 

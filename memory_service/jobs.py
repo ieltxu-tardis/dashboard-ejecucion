@@ -55,6 +55,13 @@ class JobQueueService:
             params={"tenant_id": tenant_id},
         )
         if int(count_q or "0") >= self.config.max_jobs_per_request:
+            self.db.execute(
+                """
+                INSERT INTO observability_events(tenant_id, component, route, event_type, outcome, error_code)
+                VALUES (%(tenant_id)s, 'queue', 'enqueue', 'policy_denied', 'error', 'queue_budget_exceeded');
+                """,
+                params={"tenant_id": tenant_id},
+            )
             raise ValueError("enqueue_denied:queue_budget_exceeded")
 
         job_id = self.db.fetchone_value(
@@ -76,20 +83,31 @@ class JobQueueService:
         if not job_id:
             raise RuntimeError("job_insert_failed")
 
+        self.db.execute(
+            """
+            INSERT INTO observability_events(tenant_id, component, route, event_type, outcome, job_type)
+            VALUES (%(tenant_id)s, 'queue', 'enqueue', 'job_enqueue', '2xx', %(job_type)s);
+            """,
+            params={"tenant_id": tenant_id, "job_type": job_type},
+        )
+
         # Publish to Redis stream (best effort; DB remains source of truth)
-        self.db.run_redis_cli([
-            "XADD",
-            self.config.stream_name,
-            "*",
-            "job_id",
-            job_id,
-            "tenant_id",
-            tenant_id,
-            "type",
-            job_type,
-            "payload",
-            json.dumps(payload),
-        ])
+        try:
+            self.db.run_redis_cli([
+                "XADD",
+                self.config.stream_name,
+                "*",
+                "job_id",
+                job_id,
+                "tenant_id",
+                tenant_id,
+                "type",
+                job_type,
+                "payload",
+                json.dumps(payload),
+            ])
+        except Exception:
+            pass
 
         return {"job_id": job_id, "deduped": False}
 

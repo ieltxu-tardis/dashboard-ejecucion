@@ -61,7 +61,17 @@ case "$PHASE" in
     [[ -f scripts/test-jobs.sh ]] || fail "missing scripts/test-jobs.sh"
     pass "phase 4 queue/worker/docs artifacts present"
     ;;
+  5)
+    [[ -f docs/OBSERVABILITY.md ]] || fail "missing docs/OBSERVABILITY.md"
+    [[ -f docs/ALERTS.md ]] || fail "missing docs/ALERTS.md"
+    [[ -f docs/RUNBOOK.md ]] || fail "missing docs/RUNBOOK.md"
+    [[ -f observability/logging.py ]] || fail "missing observability/logging.py"
+    [[ -f observability/metrics_server.py ]] || fail "missing observability/metrics_server.py"
+    [[ -f migrations/0008_observability.sql ]] || fail "missing migrations/0008_observability.sql"
+    [[ -f scripts/test-observability.sh ]] || fail "missing scripts/test-observability.sh"
+    pass "phase 5 observability artifacts present"
+    ;;
   *)
-    fail "usage: ./docs_check <0|1|2|3|4>"
+    fail "usage: ./docs_check <0|1|2|3|4|5>"
     ;;
 esac

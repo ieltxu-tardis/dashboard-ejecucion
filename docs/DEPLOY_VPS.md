@@ -77,6 +77,11 @@ Expected:
 ./scripts/test-jobs.sh
 ```
 
+### Observability smoke (Phase 5)
+```bash
+./scripts/test-observability.sh
+```
+
 ### Manual quick checks
 ```bash
 docker compose exec postgres psql -U "$POSTGRES_USER" -d "$POSTGRES_DB" -c "SELECT version();"
