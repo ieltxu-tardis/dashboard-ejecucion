@@ -7,6 +7,13 @@ cd "$(dirname "$0")/.."
 ./scripts/db-migrate.sh
 ./scripts/db-seed.sh
 
+# Stabilize governance tests: clear stale queued backlog that can trigger high-cost backpressure denies.
+PYTHONPATH=. python3 - <<'PY'
+from memory_service.db import PostgresExec
+PostgresExec().execute("UPDATE jobs SET status='canceled', updated_at=NOW() WHERE status='queued';")
+print('governance_prep: queue stabilized')
+PY
+
 PYTHONPATH=. python3 -m unittest tests/test_governance.py
 
 # Verify audit contains deny + pending approval and no obvious secrets
