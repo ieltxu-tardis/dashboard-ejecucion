@@ -1,0 +1,207 @@
+{
+  "updatedAt": "2026-02-12 18:36 ART",
+  "timezone": "America/Argentina/Buenos_Aires",
+  "quickLinks": [
+    {
+      "label": "Dashboard público",
+      "url": "https://ieltxu-tardis.github.io/dashboard-ejecucion/"
+    },
+    {
+      "label": "Repo dashboard",
+      "url": "https://github.com/ieltxu-tardis/dashboard-ejecucion"
+    },
+    {
+      "label": "Repo core (privado)",
+      "url": "https://github.com/ieltxu-tardis/tardis-system-core"
+    }
+  ],
+  "top3": [
+    "UTOPIA Control Tower v2 (rehacer desde cero)",
+    "Orquestación autónoma continua",
+    "Benchmark ampliado (n>=10 por escenario)"
+  ],
+  "system": {
+    "nextActive": 3,
+    "blocked": 1,
+    "waiting": 1
+  },
+  "momentum": {
+    "streakDays": 4,
+    "lastDoneHoursAgo": 0
+  },
+  "finance": [
+    "Consolidar lista de suscripciones + renovación",
+    "Definir alerta 7 días antes de cada cobro"
+  ],
+  "relationships": [
+    "Último hito: 16 meses con Anto (10/02)",
+    "Definir 2 recordatorios semanales para familia/amigos"
+  ],
+  "aiSignal": [
+    {
+      "title": "Agent orchestration",
+      "note": "priorizar retries + notificaciones"
+    },
+    {
+      "title": "Context packs",
+      "note": "estandarizar template por proyecto"
+    },
+    {
+      "title": "Noise filtering",
+      "note": "mover bookmarks útiles a base searchable"
+    }
+  ],
+  "health": [
+    "Entreno: 2-3 sesiones/semana de 20 min",
+    "Sueño: mejorar consistencia sin perder cronotipo"
+  ],
+  "architecture": [
+    "`domains/work/` → cosas de trabajo (proyectos, dashboards, notas, assets)",
+    "`domains/personal/` → vida personal/sistema personal",
+    "`domains/general/` → experimentos y utilidades compartidas",
+    "`ops/agents/` → definición de roles y reglas de colaboración",
+    "`ops/routing/` → decisiones de enrutamiento por canal/contexto",
+    "`ops/playbooks/` → procedimientos operativos (deploy, backup, incidentes)",
+    "`ops/templates/` → plantillas reutilizables",
+    "`repos/` → mapeo de repos remotos y estado local"
+  ],
+  "structureTree": [
+    "/workspace",
+    "├─ domains/",
+    "│  ├─ work/",
+    "│  ├─ personal/",
+    "│  └─ general/",
+    "├─ ops/",
+    "│  ├─ agents/",
+    "│  ├─ routing/",
+    "│  ├─ playbooks/",
+    "│  └─ templates/",
+    "├─ repos/",
+    "├─ dashboard/",
+    "└─ system-core/"
+  ],
+  "personaRoadmap": [
+    "✅ Done: contratos + handoff base (ok)",
+    "🟡 In progress: routing robusto por canal/cuenta/mention (builder fuera de #ideas-y-ganchos)",
+    "⏭ Next 72h: matrix final + checklist validación + patch approve&go",
+    "⏭ Next: telemetría realtime de agentes (running/blocked/done) en dashboard"
+  ],
+  "personaRuntime": [
+    "🟢 tardis · runs:0 · blocked:0 · thr:n/a · notas:0 · última señal:sin actividad",
+    "🟢 builder · runs:0 · blocked:0 · thr:n/a · notas:0 · última señal:sin actividad",
+    "🟢 scout · runs:0 · blocked:0 · thr:n/a · notas:0 · última señal:sin actividad"
+  ],
+  "liveOps": [
+    "Frecuencia refresh: cada 60 min",
+    "Próxima actualización estimada: 2026-02-12 19:36 ART",
+    "Último commit local: a0acf1f chore: auto-refresh dashboard",
+    "Cambios sin commit (workspace): 46",
+    "Tareas Tardis pendientes: 7",
+    "Última actualización efectiva: 2026-02-12 18:36 ART"
+  ],
+  "updatedAtIso": "2026-02-12T18:36:28.567232-03:00",
+  "refreshEveryMinutes": 60,
+  "nextEstimatedUpdateAt": "2026-02-12 19:36 ART",
+  "agentLive": [
+    "⚪ tardis · tracker unavailable",
+    "⚪ builder · tracker unavailable",
+    "⚪ scout · tracker unavailable"
+  ],
+  "tokenControl": [
+    "Plan: unknown",
+    "Consumo dedup 24h: 0",
+    "Daily Brief ROI: runs24h=0 · avgTotal=0 · avgOut=0 · eff=0.0",
+    "Recomendación: n/a"
+  ],
+  "bridgeControl": [
+    "Estado: stale",
+    "Último import: import-20260211-081708.log",
+    "Último update sandbox: 2026-02-11T09:09:01.816670+00:00",
+    "Stale (horas): 36.47",
+    "SHA: 0eb025a4d0026d0876c65b6dabb5bac8146582b5dde08ce31ed48bb424a724cd",
+    "Acción sugerida: ejecutar bridge pull + validar origen Obsidian"
+  ],
+  "statusBoard": [
+    "tardis: WORKING · alineación en frentes reales (OpenAI Responses + benchmark A/B + delegación) · plan=Utopía foco ejecución real · checkpoint=2026-02-12T17:09:14-03:00",
+    "builder: IDLE · P1 compaction OpenAI implementada; esperando decisión A/B · plan=P1 completado · checkpoint=2026-02-12T17:09:14-03:00",
+    "scout: IDLE · benchmark A/B en consolidación de conclusiones · plan=entregar decisión go/no-go · checkpoint=2026-02-12T17:09:14-03:00"
+  ],
+  "structureScopes": [
+    {
+      "scope": "dashboard",
+      "paths": [
+        "/root/.openclaw/workspace/dashboard",
+        "/root/.openclaw/workspace/scripts/update_dashboard.py"
+      ],
+      "lastChangedAt": "2026-02-12T21:37:18.478360+00:00",
+      "healthy": true,
+      "missingPaths": 0
+    },
+    {
+      "scope": "ops-agents",
+      "paths": [
+        "/root/.openclaw/workspace/ops/agents"
+      ],
+      "lastChangedAt": "2026-02-12T20:09:14.629328+00:00",
+      "healthy": true,
+      "missingPaths": 0
+    },
+    {
+      "scope": "reports-radar",
+      "paths": [
+        "/root/.openclaw/workspace/reports"
+      ],
+      "lastChangedAt": "2026-02-12T19:12:23.767760+00:00",
+      "healthy": true,
+      "missingPaths": 0
+    },
+    {
+      "scope": "tardis-core",
+      "paths": [
+        "/root/.openclaw/workspace/SOUL.md",
+        "/root/.openclaw/workspace/AGENTS.md",
+        "/root/.openclaw/workspace/MEMORY.md",
+        "/root/.openclaw/workspace/NEXT_ACTIONS.md"
+      ],
+      "lastChangedAt": "2026-02-12T07:13:10.558805+00:00",
+      "healthy": true,
+      "missingPaths": 0
+    },
+    {
+      "scope": "bridge-obsidian",
+      "paths": [
+        "/root/.openclaw/workspace/bridge"
+      ],
+      "lastChangedAt": "2026-02-12T05:47:29.107541+00:00",
+      "healthy": true,
+      "missingPaths": 0
+    },
+    {
+      "scope": "ops-handoffs",
+      "paths": [
+        "/root/.openclaw/workspace/ops/handoffs"
+      ],
+      "lastChangedAt": "2026-02-11T08:19:03.560215+00:00",
+      "healthy": true,
+      "missingPaths": 0
+    },
+    {
+      "scope": "domains",
+      "paths": [
+        "/root/.openclaw/workspace/domains"
+      ],
+      "lastChangedAt": "2026-02-11T08:19:03.559215+00:00",
+      "healthy": true,
+      "missingPaths": 0
+    }
+  ],
+  "structureNav": [
+    "dashboard · last=2026-02-12T21:37:18.478360+00:00 · healthy=True",
+    "ops-agents · last=2026-02-12T20:09:14.629328+00:00 · healthy=True",
+    "reports-radar · last=2026-02-12T19:12:23.767760+00:00 · healthy=True",
+    "tardis-core · last=2026-02-12T07:13:10.558805+00:00 · healthy=True",
+    "bridge-obsidian · last=2026-02-12T05:47:29.107541+00:00 · healthy=True",
+    "ops-handoffs · last=2026-02-11T08:19:03.560215+00:00 · healthy=True",
+    "domains · last=2026-02-11T08:19:03.559215+00:00 · healthy=True"
+  ]
+}

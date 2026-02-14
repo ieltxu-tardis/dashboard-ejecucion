@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>UTOPIA Control Tower v2</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="screen" aria-live="polite">
+    <header class="topbar">
+      <h1>UTOPIA CONTROL TOWER <span>v2</span></h1>
+      <p id="meta">Cargando señal operativa…</p>
+    </header>
+
+    <section class="blocks" id="blocks">
+      <article class="block" id="block-now">
+        <div class="block-head">
+          <h2>AHORA</h2>
+          <span class="light" id="light-now">—</span>
+        </div>
+        <p class="headline" id="now-headline">—</p>
+        <ul id="now-list"></ul>
+      </article>
+
+      <article class="block" id="block-next">
+        <div class="block-head">
+          <h2>SIGUIENTE 15m</h2>
+          <span class="light" id="light-next">—</span>
+        </div>
+        <p class="headline" id="next-headline">—</p>
+        <ul id="next-list"></ul>
+      </article>
+
+      <article class="block" id="block-risks">
+        <div class="block-head">
+          <h2>RIESGOS</h2>
+          <span class="light" id="light-risks">—</span>
+        </div>
+        <p class="headline" id="risks-headline">—</p>
+        <ul id="risks-list"></ul>
+      </article>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
