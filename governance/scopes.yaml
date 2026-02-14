@@ -3,12 +3,17 @@ actors:
     - memory:read
     - memory:write
     - docs:ingest
+    - ideas:read
+    - ideas:write
   system:
     - memory:read
     - docs:ingest
+    - ideas:read
   finance-admin:
     - memory:read
     - memory:write
     - docs:ingest
     - finance:read
     - finance:write
+    - ideas:read
+    - ideas:write

@@ -26,6 +26,8 @@ Extra rule for `validated_structured_extraction`:
 - `exec:sandbox`
 - `finance:read`
 - `finance:write`
+- `ideas:read`
+- `ideas:write`
 
 ## Enforcement (Phase 6)
 - deny-by-default for unregistered tools
@@ -42,6 +44,11 @@ Extra rule for `validated_structured_extraction`:
 | memory.semantic_search | memory:read | no | no | low |
 | jobs.enqueue_embed | docs:ingest | no | no | med |
 | finance.write_transaction | finance:write | yes | yes | high |
+| idealab.capture_idea | ideas:write | no | no | low |
+| idealab.list_ideas | ideas:read | no | no | low |
+| idealab.evaluate_idea | ideas:read | no | no | med |
+| idealab.plan_experiment | ideas:write | no | no | med |
+| idealab.log_experiment_result | ideas:write | no | no | low |
 
 ## Audit policy
 On every successful structured write:

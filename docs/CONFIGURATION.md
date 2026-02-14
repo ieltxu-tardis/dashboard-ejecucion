@@ -30,6 +30,9 @@
 - `APPROVAL_TTL_SECONDS` (default 900, i.e. 15m)
 - `APPROVALS_ADMIN_ACTOR` (default `admin-local`)
 
+### Capability modules (Phase 7)
+- `MODULES_ENABLED` comma-separated allowlist override (e.g. `idealab`)
+
 ## Notes
 - Keep metrics bound to localhost/internal network.
 - Do not expose sensitive service ports publicly.

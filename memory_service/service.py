@@ -7,7 +7,7 @@ from typing import Protocol, Any
 from .db import PostgresExec
 from .jobs import JobQueueService
 from .policy import WritePolicyEngine
-from .schemas import validate_document_write, validate_entity_write, validate_fact_write
+from .schemas import validate_document_write, validate_entity_write, validate_fact_write, validate_event_write
 from observability.logging import log_event
 
 
@@ -15,6 +15,7 @@ class IMemoryService(Protocol):
     def write_document(self, payload: dict[str, Any]) -> dict[str, Any]: ...
     def write_entity(self, payload: dict[str, Any]) -> dict[str, Any]: ...
     def write_fact(self, payload: dict[str, Any]) -> dict[str, Any]: ...
+    def write_event(self, payload: dict[str, Any]) -> dict[str, Any]: ...
     def read_entities(self, tenant_id: str, *, entity_type: str | None = None) -> list[dict[str, Any]]: ...
     def read_facts(self, tenant_id: str, *, key: str | None = None) -> list[dict[str, Any]]: ...
     def read_documents(self, tenant_id: str) -> list[dict[str, Any]]: ...
@@ -186,6 +187,34 @@ class PostgresMemoryService:
             confidence=float(payload["confidence"]),
         )
         return {"id": fact_id}
+
+    def write_event(self, payload: dict[str, Any]) -> dict[str, Any]:
+        validate_event_write(payload)
+        self._policy_gate(payload, schema_valid=True)
+        event_id = self.db.fetchone_value(
+            """
+            INSERT INTO events(tenant_id, event_type, payload, source_doc_id)
+            VALUES (%(tenant_id)s, %(event_type)s, %(payload)s::jsonb, %(source_doc_id)s::uuid)
+            RETURNING id::text;
+            """,
+            params={
+                "tenant_id": payload["tenant_id"],
+                "event_type": payload["event_type"],
+                "payload": payload["payload"],
+                "source_doc_id": payload.get("source_doc_id"),
+            },
+        )
+        self._audit(
+            tenant_id=payload["tenant_id"],
+            actor_ref=payload["actor_ref"],
+            action="write_event",
+            target_type="event",
+            target_ref=event_id or "",
+            source=payload["source"],
+            reason=payload["reason"],
+            confidence=float(payload["confidence"]),
+        )
+        return {"id": event_id}
 
     def read_entities(self, tenant_id: str, *, entity_type: str | None = None) -> list[dict[str, Any]]:
         sql = "SELECT id::text, type, name, attributes, created_at, updated_at FROM entities WHERE tenant_id = %(tenant_id)s"

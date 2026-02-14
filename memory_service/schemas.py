@@ -24,3 +24,7 @@ def validate_entity_write(payload: Dict[str, Any]) -> None:
 
 def validate_fact_write(payload: Dict[str, Any]) -> None:
     _require_fields(payload, REQUIRED_COMMON + ["key", "value"])
+
+
+def validate_event_write(payload: Dict[str, Any]) -> None:
+    _require_fields(payload, REQUIRED_COMMON + ["event_type", "payload"])

@@ -1,0 +1,4 @@
+modules:
+  - name: idealab
+    enabled: true
+    description: Capture and evaluate ideas, then plan/track experiments.

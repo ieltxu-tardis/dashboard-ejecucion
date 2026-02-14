@@ -88,7 +88,18 @@ case "$PHASE" in
     [[ -f migrations/0010_approvals_flow.sql ]] || fail "missing migrations/0010_approvals_flow.sql"
     pass "phase 6 governance+approvals artifacts present"
     ;;
+  7)
+    [[ -f modules/registry.py ]] || fail "missing modules/registry.py"
+    [[ -f modules/modules.yaml ]] || fail "missing modules/modules.yaml"
+    [[ -f modules/idealab/schemas.py ]] || fail "missing modules/idealab/schemas.py"
+    [[ -f modules/idealab/tools.py ]] || fail "missing modules/idealab/tools.py"
+    [[ -f modules/idealab/service.py ]] || fail "missing modules/idealab/service.py"
+    [[ -f modules/idealab/docs/MODULE_idealab.md ]] || fail "missing modules/idealab/docs/MODULE_idealab.md"
+    [[ -f docs/IDEALAB.md ]] || fail "missing docs/IDEALAB.md"
+    [[ -f scripts/test-idealab.sh ]] || fail "missing scripts/test-idealab.sh"
+    pass "phase 7 capability module artifacts present"
+    ;;
   *)
-    fail "usage: ./docs_check <0|1|2|3|4|5|6>"
+    fail "usage: ./docs_check <0|1|2|3|4|5|6|7>"
     ;;
 esac
