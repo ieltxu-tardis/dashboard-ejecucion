@@ -20,6 +20,23 @@ cp .env.example .env
 # edit .env and set a strong POSTGRES_PASSWORD
 ```
 
+### Connectivity mode
+
+Two secure modes are supported:
+
+1. **App in Docker (default)**
+   - app reaches `postgres` and `redis` via internal compose network names
+   - no host port exposure needed
+
+2. **App on Host (localhost-only port bind)**
+   - use compose override to bind ports only to loopback:
+
+```bash
+docker compose -f docker-compose.yml -f docker-compose.host.yml up -d
+```
+
+This binds Postgres/Redis to `127.0.0.1` only (not public internet).
+
 Required variables:
 - `POSTGRES_DB`
 - `POSTGRES_USER`
@@ -45,16 +62,17 @@ Expected:
 
 ## 5) Smoke tests
 
-### Postgres smoke
+### Full DB smoke (recommended)
 ```bash
-docker compose exec postgres psql -U "$POSTGRES_USER" -d "$POSTGRES_DB" -c "SELECT version();"
+./scripts/smoke-db.sh
 ```
 
-### Redis smoke
+### Manual quick checks
 ```bash
+docker compose exec postgres psql -U "$POSTGRES_USER" -d "$POSTGRES_DB" -c "SELECT version();"
 docker compose exec redis redis-cli ping
 ```
-Expected output: `PONG`
+Expected Redis output: `PONG`
 
 ## 6) Stop services
 

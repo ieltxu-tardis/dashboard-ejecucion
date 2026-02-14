@@ -28,7 +28,20 @@ case "$PHASE" in
     [[ -f docs/DEPLOY_VPS.md ]] || fail "missing docs/DEPLOY_VPS.md"
     pass "phase 1 infra/docs artifacts present"
     ;;
+  2)
+    [[ -f migrations/0000_schema_migrations.sql ]] || fail "missing migrations/0000_schema_migrations.sql"
+    [[ -f migrations/0001_extensions.sql ]] || fail "missing migrations/0001_extensions.sql"
+    [[ -f migrations/0002_core_schema.sql ]] || fail "missing migrations/0002_core_schema.sql"
+    [[ -f migrations/0003_indexes.sql ]] || fail "missing migrations/0003_indexes.sql"
+    [[ -f migrations/0004_seed_default.sql ]] || fail "missing migrations/0004_seed_default.sql"
+    [[ -f scripts/db-migrate.sh ]] || fail "missing scripts/db-migrate.sh"
+    [[ -f scripts/db-seed.sh ]] || fail "missing scripts/db-seed.sh"
+    [[ -f scripts/smoke-db.sh ]] || fail "missing scripts/smoke-db.sh"
+    [[ -f docs/DATA_MODEL.md ]] || fail "missing docs/DATA_MODEL.md"
+    [[ -f docs/DB_MIGRATIONS.md ]] || fail "missing docs/DB_MIGRATIONS.md"
+    pass "phase 2 db migration/schema artifacts present"
+    ;;
   *)
-    fail "usage: ./docs_check <0|1>"
+    fail "usage: ./docs_check <0|1|2>"
     ;;
 esac
