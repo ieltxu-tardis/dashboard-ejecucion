@@ -50,7 +50,18 @@ case "$PHASE" in
     [[ -f scripts/test-memory.sh ]] || fail "missing scripts/test-memory.sh"
     pass "phase 3 memory service/policy/docs artifacts present"
     ;;
+  4)
+    [[ -f docs/JOBS_QUEUE.md ]] || fail "missing docs/JOBS_QUEUE.md"
+    [[ -f docs/EMBEDDINGS.md ]] || fail "missing docs/EMBEDDINGS.md"
+    [[ -f docs/adr/0004-queue-workers.md ]] || fail "missing docs/adr/0004-queue-workers.md"
+    [[ -f migrations/0006_jobs.sql ]] || fail "missing migrations/0006_jobs.sql"
+    [[ -f migrations/0007_document_chunks.sql ]] || fail "missing migrations/0007_document_chunks.sql"
+    [[ -f workers/jobs_worker.py ]] || fail "missing workers/jobs_worker.py"
+    [[ -f workers/enqueue_job.py ]] || fail "missing workers/enqueue_job.py"
+    [[ -f scripts/test-jobs.sh ]] || fail "missing scripts/test-jobs.sh"
+    pass "phase 4 queue/worker/docs artifacts present"
+    ;;
   *)
-    fail "usage: ./docs_check <0|1|2|3>"
+    fail "usage: ./docs_check <0|1|2|3|4>"
     ;;
 esac

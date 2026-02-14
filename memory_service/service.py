@@ -4,6 +4,7 @@ from dataclasses import dataclass
 from typing import Protocol, Any
 
 from .db import PostgresExec
+from .jobs import JobQueueService
 from .policy import WritePolicyEngine
 from .schemas import validate_document_write, validate_entity_write, validate_fact_write
 
@@ -24,10 +25,12 @@ class IMemoryService(Protocol):
 class PostgresMemoryService:
     db: PostgresExec
     policy: WritePolicyEngine
+    jobs: JobQueueService | None = None
 
     @classmethod
     def build(cls) -> "PostgresMemoryService":
-        return cls(db=PostgresExec(), policy=WritePolicyEngine())
+        db = PostgresExec()
+        return cls(db=db, policy=WritePolicyEngine(), jobs=JobQueueService(db))
 
     def _policy_gate(self, payload: dict[str, Any], schema_valid: bool) -> None:
         decision = self.policy.evaluate(
@@ -97,7 +100,15 @@ class PostgresMemoryService:
             reason=payload["reason"],
             confidence=float(payload["confidence"]),
         )
-        return {"id": doc_id}
+
+        enqueue_result = None
+        if self.jobs is not None:
+            try:
+                enqueue_result = self.jobs.enqueue_embedding_job(tenant_id=payload["tenant_id"], doc_id=doc_id)
+            except Exception:
+                enqueue_result = {"queued": False, "reason": "enqueue_failed"}
+
+        return {"id": doc_id, "embedding_job": enqueue_result}
 
     def write_entity(self, payload: dict[str, Any]) -> dict[str, Any]:
         validate_entity_write(payload)
@@ -200,14 +211,20 @@ class PostgresMemoryService:
             """
             SELECT e.id::text as embedding_id,
                    e.doc_id::text,
+                   e.chunk_id,
                    d.source_type,
                    d.source_ref,
                    d.content_hash,
+                   left(dc.chunk_text, 220) as snippet,
                    (e.embedding <=> %(vector)s::vector) AS distance,
                    d.metadata,
                    d.created_at
             FROM embeddings e
             JOIN documents d ON d.id = e.doc_id
+            LEFT JOIN document_chunks dc
+                   ON dc.tenant_id = e.tenant_id
+                  AND dc.doc_id = e.doc_id
+                  AND dc.chunk_id = e.chunk_id
             WHERE e.tenant_id = %(tenant_id)s
               AND d.tenant_id = %(tenant_id)s
             ORDER BY e.embedding <=> %(vector)s::vector

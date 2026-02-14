@@ -80,6 +80,28 @@ All core tables include `tenant_id` (NOT NULL) except `tenants` and `schema_migr
 - `metadata JSONB`
 - `created_at`, `updated_at`
 
+### document_chunks (Phase 4)
+- `id UUID PK`
+- `tenant_id UUID FK`
+- `doc_id UUID FK -> documents(id)`
+- `chunk_id TEXT`
+- `chunk_text TEXT`
+- `chunk_index INT`
+- `token_estimate INT`
+- `metadata JSONB`
+- Unique: `(tenant_id, doc_id, chunk_id)`
+
+### jobs (Phase 4)
+- `id UUID PK`
+- `tenant_id UUID FK`
+- `type TEXT`
+- `payload JSONB`
+- `status TEXT` (`queued|running|done|failed`)
+- `priority INT`
+- `dedupe_key TEXT` (unique by tenant)
+- `scheduled_at`, `attempts`, `max_attempts`, `timeout_seconds`
+- `last_error`, `created_at`, `updated_at`
+
 ### audit_log (recommended for next phases)
 - `id UUID PK`
 - `tenant_id UUID FK`

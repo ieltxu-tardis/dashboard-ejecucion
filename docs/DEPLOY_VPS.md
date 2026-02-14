@@ -48,6 +48,11 @@ Required variables:
 ./scripts/dev-up.sh
 ```
 
+By default this starts postgres + redis only.
+Worker can run either:
+- host process: `PYTHONPATH=. python3 workers/jobs_worker.py`
+- compose profile: `docker compose --profile workers up -d worker`
+
 ## 4) Verify health
 
 ```bash
@@ -65,6 +70,11 @@ Expected:
 ### Full DB smoke (recommended)
 ```bash
 ./scripts/smoke-db.sh
+```
+
+### Queue/worker smoke (Phase 4)
+```bash
+./scripts/test-jobs.sh
 ```
 
 ### Manual quick checks

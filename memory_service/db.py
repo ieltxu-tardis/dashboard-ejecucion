@@ -82,13 +82,32 @@ class PostgresExec:
         return proc.stdout.strip() if fetch else ""
 
     def fetchall_json(self, sql: str, *, params: dict[str, Any] | None = None) -> list[dict[str, Any]]:
-        wrapped = f"SELECT COALESCE(json_agg(t), '[]'::json)::text FROM ({sql}) t;"
+        clean = sql.strip().rstrip(";")
+        wrapped = f"SELECT COALESCE(json_agg(t), '[]'::json)::text FROM ({clean}) t;"
         out = self._psql(wrapped, params=params, fetch=True)
         return json.loads(out or "[]")
 
     def fetchone_value(self, sql: str, *, params: dict[str, Any] | None = None) -> str | None:
-        out = self._psql(sql, params=params, fetch=True)
+        clean = sql.strip().rstrip(";")
+        out = self._psql(clean, params=params, fetch=True)
         return out if out else None
 
     def execute(self, sql: str, *, params: dict[str, Any] | None = None) -> None:
         _ = self._psql(sql, params=params, fetch=False)
+
+    def run_redis_cli(self, args: list[str], *, raw: bool = False) -> str:
+        cmd = ["docker", "compose", "exec", "-T", "redis", "redis-cli"]
+        if raw:
+            cmd.append("--raw")
+        cmd.extend(args)
+        proc = subprocess.run(
+            cmd,
+            cwd=self.repo_root,
+            env=self.env,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        if proc.returncode != 0:
+            raise RuntimeError(proc.stderr.strip() or proc.stdout.strip() or "redis_cli_failed")
+        return proc.stdout.strip()
