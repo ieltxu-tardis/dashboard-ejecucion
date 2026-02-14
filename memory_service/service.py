@@ -7,7 +7,14 @@ from typing import Protocol, Any
 from .db import PostgresExec
 from .jobs import JobQueueService
 from .policy import WritePolicyEngine
-from .schemas import validate_document_write, validate_entity_write, validate_fact_write, validate_event_write
+from .schemas import (
+    validate_document_write,
+    validate_entity_write,
+    validate_fact_write,
+    validate_event_write,
+    validate_task_write,
+    validate_task_update,
+)
 from observability.logging import log_event
 
 
@@ -16,6 +23,8 @@ class IMemoryService(Protocol):
     def write_entity(self, payload: dict[str, Any]) -> dict[str, Any]: ...
     def write_fact(self, payload: dict[str, Any]) -> dict[str, Any]: ...
     def write_event(self, payload: dict[str, Any]) -> dict[str, Any]: ...
+    def write_task(self, payload: dict[str, Any]) -> dict[str, Any]: ...
+    def update_task(self, payload: dict[str, Any]) -> dict[str, Any]: ...
     def read_entities(self, tenant_id: str, *, entity_type: str | None = None) -> list[dict[str, Any]]: ...
     def read_facts(self, tenant_id: str, *, key: str | None = None) -> list[dict[str, Any]]: ...
     def read_documents(self, tenant_id: str) -> list[dict[str, Any]]: ...
@@ -215,6 +224,73 @@ class PostgresMemoryService:
             confidence=float(payload["confidence"]),
         )
         return {"id": event_id}
+
+    def write_task(self, payload: dict[str, Any]) -> dict[str, Any]:
+        validate_task_write(payload)
+        self._policy_gate(payload, schema_valid=True)
+        task_id = self.db.fetchone_value(
+            """
+            INSERT INTO tasks(tenant_id, title, status, due_at, metadata)
+            VALUES (%(tenant_id)s, %(title)s, %(status)s, %(due_at)s, %(metadata)s::jsonb)
+            RETURNING id::text;
+            """,
+            params={
+                "tenant_id": payload["tenant_id"],
+                "title": payload["title"],
+                "status": payload.get("status", "open"),
+                "due_at": payload.get("due_at"),
+                "metadata": payload.get("metadata", {}),
+            },
+        )
+        self._audit(
+            tenant_id=payload["tenant_id"],
+            actor_ref=payload["actor_ref"],
+            action="write_task",
+            target_type="task",
+            target_ref=(task_id or "").splitlines()[0],
+            source=payload["source"],
+            reason=payload["reason"],
+            confidence=float(payload["confidence"]),
+        )
+        return {"id": (task_id or "").splitlines()[0]}
+
+    def update_task(self, payload: dict[str, Any]) -> dict[str, Any]:
+        validate_task_update(payload)
+        self._policy_gate(payload, schema_valid=True)
+        self.db.execute(
+            """
+            UPDATE tasks
+            SET title = COALESCE(%(title)s, title),
+                status = COALESCE(%(status)s, status),
+                due_at = COALESCE(%(due_at)s, due_at),
+                metadata = CASE
+                    WHEN %(tags)s IS NULL THEN metadata
+                    ELSE metadata || jsonb_build_object('tags', %(tags)s::jsonb)
+                END,
+                updated_at = NOW()
+            WHERE tenant_id = %(tenant_id)s
+              AND id = %(task_id)s::uuid
+            """,
+            params={
+                "tenant_id": payload["tenant_id"],
+                "task_id": str(payload["task_id"]).splitlines()[0],
+                "title": payload.get("title"),
+                "status": payload.get("status"),
+                "due_at": payload.get("due_at"),
+                "tags": payload.get("tags"),
+            },
+        )
+        self._audit(
+            tenant_id=payload["tenant_id"],
+            actor_ref=payload["actor_ref"],
+            action="update_task",
+            target_type="task",
+            target_ref=str(payload["task_id"]).splitlines()[0],
+            source=payload["source"],
+            reason=payload["reason"],
+            confidence=float(payload["confidence"]),
+        )
+        return {"id": str(payload["task_id"]).splitlines()[0], "updated": True}
 
     def read_entities(self, tenant_id: str, *, entity_type: str | None = None) -> list[dict[str, Any]]:
         sql = "SELECT id::text, type, name, attributes, created_at, updated_at FROM entities WHERE tenant_id = %(tenant_id)s"

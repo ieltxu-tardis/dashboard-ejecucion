@@ -5,10 +5,13 @@ actors:
     - docs:ingest
     - ideas:read
     - ideas:write
+    - time:read
+    - time:write
   system:
     - memory:read
     - docs:ingest
     - ideas:read
+    - time:read
   finance-admin:
     - memory:read
     - memory:write
@@ -17,3 +20,5 @@ actors:
     - finance:write
     - ideas:read
     - ideas:write
+    - time:read
+    - time:write

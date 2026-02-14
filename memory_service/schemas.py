@@ -28,3 +28,11 @@ def validate_fact_write(payload: Dict[str, Any]) -> None:
 
 def validate_event_write(payload: Dict[str, Any]) -> None:
     _require_fields(payload, REQUIRED_COMMON + ["event_type", "payload"])
+
+
+def validate_task_write(payload: Dict[str, Any]) -> None:
+    _require_fields(payload, REQUIRED_COMMON + ["title"])
+
+
+def validate_task_update(payload: Dict[str, Any]) -> None:
+    _require_fields(payload, REQUIRED_COMMON + ["task_id"])

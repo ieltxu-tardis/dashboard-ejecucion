@@ -2,3 +2,7 @@ modules:
   - name: idealab
     enabled: true
     description: Capture and evaluate ideas, then plan/track experiments.
+
+  - name: timelab
+    enabled: false
+    description: Tasks, goals, and weekly reviews.

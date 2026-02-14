@@ -99,7 +99,17 @@ case "$PHASE" in
     [[ -f scripts/test-idealab.sh ]] || fail "missing scripts/test-idealab.sh"
     pass "phase 7 capability module artifacts present"
     ;;
+  8)
+    [[ -f modules/timelab/schemas.py ]] || fail "missing modules/timelab/schemas.py"
+    [[ -f modules/timelab/tools.py ]] || fail "missing modules/timelab/tools.py"
+    [[ -f modules/timelab/service.py ]] || fail "missing modules/timelab/service.py"
+    [[ -f modules/timelab/docs/MODULE_timelab.md ]] || fail "missing modules/timelab/docs/MODULE_timelab.md"
+    [[ -f docs/TIMELAB.md ]] || fail "missing docs/TIMELAB.md"
+    [[ -f scripts/test-timelab.sh ]] || fail "missing scripts/test-timelab.sh"
+    [[ -f docs/POLICY.md ]] || fail "missing docs/POLICY.md"
+    pass "phase 8 timelab artifacts present"
+    ;;
   *)
-    fail "usage: ./docs_check <0|1|2|3|4|5|6|7>"
+    fail "usage: ./docs_check <0|1|2|3|4|5|6|7|8>"
     ;;
 esac

@@ -70,3 +70,69 @@ tools:
     max_memory_mb: 128
     network_policy: none
     filesystem_policy: none
+
+  - name: timelab.capture_task
+    scope: time:write
+    input_schema: {type: object, required: [title]}
+    output_schema: {type: object, required: [id]}
+    requires_approval: false
+    cost_class: low
+    max_runtime_ms: 800
+    max_memory_mb: 128
+    network_policy: none
+    filesystem_policy: none
+
+  - name: timelab.list_tasks
+    scope: time:read
+    input_schema: {type: object}
+    output_schema: {type: array}
+    requires_approval: false
+    cost_class: low
+    max_runtime_ms: 600
+    max_memory_mb: 128
+    network_policy: none
+    filesystem_policy: none
+
+  - name: timelab.update_task
+    scope: time:write
+    input_schema: {type: object, required: [task_id]}
+    output_schema: {type: object, required: [id, updated]}
+    requires_approval: false
+    cost_class: low
+    max_runtime_ms: 800
+    max_memory_mb: 128
+    network_policy: none
+    filesystem_policy: none
+
+  - name: timelab.capture_goal
+    scope: time:write
+    input_schema: {type: object, required: [title]}
+    output_schema: {type: object, required: [id]}
+    requires_approval: false
+    cost_class: low
+    max_runtime_ms: 800
+    max_memory_mb: 128
+    network_policy: none
+    filesystem_policy: none
+
+  - name: timelab.list_goals
+    scope: time:read
+    input_schema: {type: object}
+    output_schema: {type: array}
+    requires_approval: false
+    cost_class: low
+    max_runtime_ms: 600
+    max_memory_mb: 128
+    network_policy: none
+    filesystem_policy: none
+
+  - name: timelab.weekly_review
+    scope: time:read
+    input_schema: {type: object, properties: {persist: {type: boolean}}}
+    output_schema: {type: object, required: [summary, persisted]}
+    requires_approval: false
+    cost_class: med
+    max_runtime_ms: 1500
+    max_memory_mb: 192
+    network_policy: none
+    filesystem_policy: none

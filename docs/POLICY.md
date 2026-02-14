@@ -28,6 +28,8 @@ Extra rule for `validated_structured_extraction`:
 - `finance:write`
 - `ideas:read`
 - `ideas:write`
+- `time:read`
+- `time:write`
 
 ## Enforcement (Phase 6)
 - deny-by-default for unregistered tools
@@ -49,6 +51,12 @@ Extra rule for `validated_structured_extraction`:
 | idealab.evaluate_idea | ideas:read | no | no | med |
 | idealab.plan_experiment | ideas:write | no | no | med |
 | idealab.log_experiment_result | ideas:write | no | no | low |
+| timelab.capture_task | time:write | no | no | low |
+| timelab.list_tasks | time:read | no | no | low |
+| timelab.update_task | time:write | no | no | low |
+| timelab.capture_goal | time:write | no | no | low |
+| timelab.list_goals | time:read | no | no | low |
+| timelab.weekly_review | time:read (time:write when persist) | no | no | med |
 
 ## Audit policy
 On every successful structured write:

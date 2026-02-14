@@ -30,8 +30,9 @@
 - `APPROVAL_TTL_SECONDS` (default 900, i.e. 15m)
 - `APPROVALS_ADMIN_ACTOR` (default `admin-local`)
 
-### Capability modules (Phase 7)
-- `MODULES_ENABLED` comma-separated allowlist override (e.g. `idealab`)
+### Capability modules (Phase 7/8)
+- `MODULES_ENABLED` comma-separated allowlist override (e.g. `idealab,timelab`)
+- default module flags live in `modules/modules.yaml` (fail-closed recommended for new modules)
 
 ## Notes
 - Keep metrics bound to localhost/internal network.
