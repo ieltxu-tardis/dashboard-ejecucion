@@ -247,8 +247,13 @@ policy_baseline_v0:
       - privilege_boundary_changes
 ```
 
-## 7) Phase 0 conclusion
-- Discovery complete.
-- Architecture direction selected: Postgres + pgvector + Redis, modularized behind service contracts.
-- ToolRunner boundaries and degraded-mode strategy are now explicit for Phase 1 implementation.
-- No runtime code changes performed in this phase.
+## 7) Phase 3 interface update
+- `memory_service/` now contains `IMemoryService` + `PostgresMemoryService`.
+- Write path is policy-gated (`WritePolicyEngine`) and schema-validated before persistence.
+- Read path enforces tenant filtering in all structured queries.
+- Semantic search contract is live (`semantic_search`) and compatible with deferred embedding generation.
+
+## 8) Status snapshot
+- Discovery and infra baseline complete.
+- DB schema/migrations in place.
+- Memory Service baseline implemented (structured reads/writes + audit + semantic query interface).

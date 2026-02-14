@@ -34,6 +34,7 @@ case "$PHASE" in
     [[ -f migrations/0002_core_schema.sql ]] || fail "missing migrations/0002_core_schema.sql"
     [[ -f migrations/0003_indexes.sql ]] || fail "missing migrations/0003_indexes.sql"
     [[ -f migrations/0004_seed_default.sql ]] || fail "missing migrations/0004_seed_default.sql"
+    [[ -f migrations/0005_tasks.sql ]] || fail "missing migrations/0005_tasks.sql"
     [[ -f scripts/db-migrate.sh ]] || fail "missing scripts/db-migrate.sh"
     [[ -f scripts/db-seed.sh ]] || fail "missing scripts/db-seed.sh"
     [[ -f scripts/smoke-db.sh ]] || fail "missing scripts/smoke-db.sh"
@@ -41,7 +42,15 @@ case "$PHASE" in
     [[ -f docs/DB_MIGRATIONS.md ]] || fail "missing docs/DB_MIGRATIONS.md"
     pass "phase 2 db migration/schema artifacts present"
     ;;
+  3)
+    [[ -f docs/API_MEMORY.md ]] || fail "missing docs/API_MEMORY.md"
+    [[ -f docs/POLICY.md ]] || fail "missing docs/POLICY.md"
+    [[ -f memory_service/service.py ]] || fail "missing memory_service/service.py"
+    [[ -f memory_service/policy.py ]] || fail "missing memory_service/policy.py"
+    [[ -f scripts/test-memory.sh ]] || fail "missing scripts/test-memory.sh"
+    pass "phase 3 memory service/policy/docs artifacts present"
+    ;;
   *)
-    fail "usage: ./docs_check <0|1|2>"
+    fail "usage: ./docs_check <0|1|2|3>"
     ;;
 esac

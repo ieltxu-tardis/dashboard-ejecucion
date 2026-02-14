@@ -13,6 +13,7 @@ This repo uses a minimal SQL migration runner:
 - `0002_core_schema.sql`
 - `0003_indexes.sql`
 - `0004_seed_default.sql` (seed path, also runnable via `db-seed.sh`)
+- `0005_tasks.sql` (tasks table + tenant indexes)
 
 ## How to run
 

@@ -71,6 +71,15 @@ All core tables include `tenant_id` (NOT NULL) except `tenants` and `schema_migr
 - `created_at`
 - Unique: `(tenant_id, doc_id, chunk_id, model)`
 
+### tasks
+- `id UUID PK`
+- `tenant_id UUID FK`
+- `title TEXT NOT NULL`
+- `status TEXT NOT NULL`
+- `due_at TIMESTAMPTZ`
+- `metadata JSONB`
+- `created_at`, `updated_at`
+
 ### audit_log (recommended for next phases)
 - `id UUID PK`
 - `tenant_id UUID FK`
