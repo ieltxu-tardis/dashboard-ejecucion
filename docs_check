@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+"$(dirname "$0")/scripts/docs_check.sh" "$@"
