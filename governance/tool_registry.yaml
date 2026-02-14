@@ -1,0 +1,27 @@
+tools:
+  - name: memory.semantic_search
+    scope: memory:read
+    requires_approval: false
+    cost_class: low
+    max_runtime_ms: 800
+    max_memory_mb: 256
+    network_policy: none
+    filesystem_policy: none
+
+  - name: jobs.enqueue_embed
+    scope: docs:ingest
+    requires_approval: false
+    cost_class: med
+    max_runtime_ms: 500
+    max_memory_mb: 128
+    network_policy: none
+    filesystem_policy: none
+
+  - name: finance.write_transaction
+    scope: finance:write
+    requires_approval: true
+    cost_class: high
+    max_runtime_ms: 1200
+    max_memory_mb: 256
+    network_policy: none
+    filesystem_policy: limited

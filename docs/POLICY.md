@@ -19,17 +19,29 @@ Extra rule for `validated_structured_extraction`:
 - schema validation must pass
 - confidence must be `>= 0.85`
 
-## Scope model (baseline)
+## Scope model (enforced baseline)
 - `memory:write`
 - `memory:read`
 - `docs:ingest`
 - `exec:sandbox`
+- `finance:read`
+- `finance:write`
 
-(Expanded scope/budget engine is planned for later phase.)
+## Enforcement (Phase 6)
+- deny-by-default for unregistered tools
+- actor scope checks against `governance/scopes.yaml`
+- approval gating when tool has `requires_approval=true`
+- request budgets for tool calls and jobs enqueued
+- rate limiting via Redis keys per actor
+- safe-mode switches (tools/jobs/finance write)
 
-## Approvals/budgets (current)
-- Budgets are documented but not enforced by runtime gate yet.
-- Sensitive external side-effects remain manual approval territory.
+## Scope/action sensitivity matrix
+
+| Tool / Action | Scope | Sensitive | Requires approval | Cost class |
+|---|---|---:|---:|---|
+| memory.semantic_search | memory:read | no | no | low |
+| jobs.enqueue_embed | docs:ingest | no | no | med |
+| finance.write_transaction | finance:write | yes | yes | high |
 
 ## Audit policy
 On every successful structured write:

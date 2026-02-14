@@ -1,0 +1,14 @@
+actors:
+  default-user:
+    - memory:read
+    - memory:write
+    - docs:ingest
+  system:
+    - memory:read
+    - docs:ingest
+  finance-admin:
+    - memory:read
+    - memory:write
+    - docs:ingest
+    - finance:read
+    - finance:write

@@ -71,7 +71,19 @@ case "$PHASE" in
     [[ -f scripts/test-observability.sh ]] || fail "missing scripts/test-observability.sh"
     pass "phase 5 observability artifacts present"
     ;;
+  6)
+    [[ -f governance/tool_registry.yaml ]] || fail "missing governance/tool_registry.yaml"
+    [[ -f governance/scopes.yaml ]] || fail "missing governance/scopes.yaml"
+    [[ -f governance/engine.py ]] || fail "missing governance/engine.py"
+    [[ -f governance/tool_runner.py ]] || fail "missing governance/tool_runner.py"
+    [[ -f governance/rate_limit.py ]] || fail "missing governance/rate_limit.py"
+    [[ -f docs/SECURITY.md ]] || fail "missing docs/SECURITY.md"
+    [[ -f docs/CONFIGURATION.md ]] || fail "missing docs/CONFIGURATION.md"
+    [[ -f scripts/test-governance.sh ]] || fail "missing scripts/test-governance.sh"
+    [[ -f migrations/0009_governance.sql ]] || fail "missing migrations/0009_governance.sql"
+    pass "phase 6 governance artifacts present"
+    ;;
   *)
-    fail "usage: ./docs_check <0|1|2|3|4|5>"
+    fail "usage: ./docs_check <0|1|2|3|4|5|6>"
     ;;
 esac
