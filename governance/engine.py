@@ -7,6 +7,7 @@ import yaml
 from memory_service.db import PostgresExec
 from .config import load_config
 from .rate_limit import RedisRateLimiter
+from .approvals import ApprovalService
 
 
 @dataclass
@@ -31,6 +32,7 @@ class GovernanceEngine:
         self.registry = yaml.safe_load((Path(repo_root) / "governance/tool_registry.yaml").read_text())
         self.scopes = yaml.safe_load((Path(repo_root) / "governance/scopes.yaml").read_text())
         self.ratelimiter = RedisRateLimiter(repo_root)
+        self.approvals = ApprovalService(self.db, self.cfg)
 
     def _audit(self, tenant_id: str, actor_ref: str, action: str, outcome: str, reason: str, payload: dict | None = None):
         self.db.execute(
@@ -73,7 +75,7 @@ class GovernanceEngine:
         lag = float(self.db.fetchone_value("SELECT COALESCE(MAX(EXTRACT(EPOCH FROM (NOW()-scheduled_at))),0)::text FROM jobs WHERE status='queued'") or "0")
         return qd >= self.cfg.queue_depth_high or lag >= self.cfg.queue_lag_high_seconds
 
-    def authorize_tool(self, *, tenant_id: str, actor_ref: str, tool_name: str, budget: RequestBudget) -> Decision:
+    def authorize_tool(self, *, tenant_id: str, actor_ref: str, tool_name: str, budget: RequestBudget, payload: dict | None = None) -> Decision:
         if self.cfg.safe_mode_tools_disabled:
             self._audit(tenant_id, actor_ref, tool_name, "deny", "safe_mode_tools_disabled")
             return Decision("deny", "safe_mode_tools_disabled")
@@ -106,13 +108,12 @@ class GovernanceEngine:
             return Decision("deny", "backpressure_high_cost_denied")
 
         if tool.get("requires_approval"):
-            aid = self.db.fetchone_value(
-                """
-                INSERT INTO approval_requests(tenant_id, actor_ref, action, scope, status, reason_code, request_payload)
-                VALUES (%(tenant_id)s, %(actor_ref)s, %(action)s, %(scope)s, 'pending', 'requires_approval', '{}'::jsonb)
-                RETURNING id::text;
-                """,
-                params={"tenant_id": tenant_id, "actor_ref": actor_ref, "action": tool_name, "scope": scope},
+            aid = self.approvals.create_pending(
+                tenant_id=tenant_id,
+                actor_ref=actor_ref,
+                action=tool_name,
+                scope=scope,
+                request_payload=payload or {},
             )
             self._audit(tenant_id, actor_ref, tool_name, "pending_approval", "requires_approval", {"approval_id": aid})
             self.db.execute(

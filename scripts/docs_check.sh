@@ -80,8 +80,13 @@ case "$PHASE" in
     [[ -f docs/SECURITY.md ]] || fail "missing docs/SECURITY.md"
     [[ -f docs/CONFIGURATION.md ]] || fail "missing docs/CONFIGURATION.md"
     [[ -f scripts/test-governance.sh ]] || fail "missing scripts/test-governance.sh"
+    [[ -f scripts/test-approvals.sh ]] || fail "missing scripts/test-approvals.sh"
+    [[ -f scripts/approvals ]] || fail "missing scripts/approvals"
+    [[ -f governance/approvals.py ]] || fail "missing governance/approvals.py"
+    [[ -f governance/approvals_cli.py ]] || fail "missing governance/approvals_cli.py"
     [[ -f migrations/0009_governance.sql ]] || fail "missing migrations/0009_governance.sql"
-    pass "phase 6 governance artifacts present"
+    [[ -f migrations/0010_approvals_flow.sql ]] || fail "missing migrations/0010_approvals_flow.sql"
+    pass "phase 6 governance+approvals artifacts present"
     ;;
   *)
     fail "usage: ./docs_check <0|1|2|3|4|5|6>"

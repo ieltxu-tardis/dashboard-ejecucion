@@ -49,16 +49,23 @@ PY
 2. Restart worker process.
 3. Re-run `./scripts/test-jobs.sh`.
 
+### Approval operations (CLI local)
+```bash
+./scripts/approvals list --status pending
+./scripts/approvals show <approval_id>
+./scripts/approvals approve <approval_id> --reason "validated" --by "admin-local"
+./scripts/approvals deny <approval_id> --reason "rejected" --by "admin-local"
+./scripts/approvals expire
+```
+
 ### Approval stuck
 1. Inspect pending approvals:
 ```bash
-python3 - <<'PY'
-from memory_service.db import PostgresExec
-print(PostgresExec().fetchall_json("SELECT id::text,actor_ref,action,scope,status,created_at FROM approval_requests WHERE status='pending' ORDER BY created_at DESC LIMIT 20"))
-PY
+./scripts/approvals list --status pending
 ```
 2. Verify actor scopes and tool registry metadata.
-3. Decide approve/reject path (manual until approval API is added).
+3. Approve/deny explicitly with reason.
+4. If old pending requests accumulate, run `./scripts/approvals expire`.
 
 ### Budget exhausted
 1. Check recent governance denies:

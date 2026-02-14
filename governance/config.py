@@ -16,6 +16,8 @@ class GovernanceConfig:
     req_max_total_runtime_ms: int
     queue_depth_high: int
     queue_lag_high_seconds: int
+    approval_ttl_seconds: int
+    approvals_admin_actor: str
 
 
 def load_yaml(path: str) -> dict:
@@ -32,4 +34,6 @@ def load_config() -> GovernanceConfig:
         req_max_total_runtime_ms=int(os.getenv("REQ_MAX_TOTAL_RUNTIME_MS", "120000")),
         queue_depth_high=int(os.getenv("QUEUE_DEPTH_HIGH", "50")),
         queue_lag_high_seconds=int(os.getenv("QUEUE_LAG_HIGH_SECONDS", "120")),
+        approval_ttl_seconds=int(os.getenv("APPROVAL_TTL_SECONDS", "900")),
+        approvals_admin_actor=os.getenv("APPROVALS_ADMIN_ACTOR", "admin-local"),
     )
