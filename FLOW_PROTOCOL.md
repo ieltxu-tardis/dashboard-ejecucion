@@ -44,6 +44,22 @@ Purpose: keep execution continuously moving; no idle/dead state. Every tracked i
 - No task may remain BLOCKED without an explicit unblock trigger.
 - No task may remain ACTIVE_NOW without a next action.
 - If no ACTIVE_NOW exists, immediately promote the highest-priority actionable item from queue/park.
+- No operational channel is considered DONE unless it is instrumented and emitting verifiable runtime signal.
+
+## Operational Channel Guardrail (mandatory)
+
+When creating or accepting an operational channel (e.g., `#sistema`, `#agent-feed`), completion requires all of the following:
+
+1. Channel created.
+2. Runtime telemetry connected.
+3. State semantics defined (strategy vs runtime).
+4. Anti-noise rule active (`NO_REPLY` when no meaningful change).
+5. One pinned usage note with expected event format.
+
+**Definition of Done for channel setup:**
+`created + instrumented + semantics + anti-noise + pinned guide`.
+
+Anything less is `IN_PROGRESS`, not `DONE`.
 
 ## Operator Loop Checklist (max 8)
 
