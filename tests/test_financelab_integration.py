@@ -69,7 +69,7 @@ class FinanceLabIntegrationTests(unittest.TestCase):
             payload={"import_id": preview["import_id"], "approval_id": approval_id},
         )
         self.assertEqual(second["status"], "ok")
-        self.assertGreaterEqual(second["inserted"], 1)
+        self.assertEqual(second["inserted"] + second["deduped"], 3)
 
         third = self.svc.commit_import(
             tenant_id=self.tenant_id,
