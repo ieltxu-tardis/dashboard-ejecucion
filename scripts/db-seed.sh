@@ -8,5 +8,9 @@ if [[ ! -f .env ]]; then
   exit 1
 fi
 
+set -a
+source ./.env
+set +a
+
 cat migrations/0004_seed_default.sql | docker compose exec -T postgres psql -v ON_ERROR_STOP=1 -U "$POSTGRES_USER" -d "$POSTGRES_DB"
 echo "[db-seed] done"

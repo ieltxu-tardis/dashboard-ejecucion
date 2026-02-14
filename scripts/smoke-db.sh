@@ -8,6 +8,10 @@ if [[ ! -f .env ]]; then
   exit 1
 fi
 
+set -a
+source ./.env
+set +a
+
 if ! docker compose ps >/dev/null 2>&1; then
   echo "[smoke-db] docker compose unavailable"
   exit 1

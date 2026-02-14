@@ -8,10 +8,22 @@ if [[ ! -f .env ]]; then
   exit 1
 fi
 
+set -a
+source ./.env
+set +a
+
 if ! docker compose ps postgres >/dev/null 2>&1; then
   echo "[db-migrate] docker compose not available for postgres service."
   exit 1
 fi
+
+# Wait for postgres readiness
+for i in $(seq 1 30); do
+  if docker compose exec -T postgres pg_isready -U "$POSTGRES_USER" -d "$POSTGRES_DB" >/dev/null 2>&1; then
+    break
+  fi
+  sleep 2
+done
 
 # Ensure schema_migrations exists
 cat migrations/0000_schema_migrations.sql | docker compose exec -T postgres psql -v ON_ERROR_STOP=1 -U "$POSTGRES_USER" -d "$POSTGRES_DB"
