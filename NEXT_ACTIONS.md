@@ -1,30 +1,31 @@
 # NEXT_ACTIONS.md
 
 ## INBOX
-- [ ] Definir objetivo operativo de la nueva v2 (1 párrafo)
-- [ ] Decidir si el dashboard renace o se reemplaza por status textual
-- [ ] Inventariar automatizaciones realmente necesarias (máx 5)
+- [ ] Cargar inventario real de proyectos por canal
+- [ ] Definir límite WIP global
+- [ ] Acordar cadencia de reporte en `#sistema`
 
 ## NEXT (Top 3)
-- [ ] (NEXT) Publicar mapa canónico del sistema
-  - Resultado: `SYSTEM_MAP.md` acordado y visible
-  - Primer paso: validar que refleja 100% del estado actual
+- [ ] (NEXT) Contrato de eventos para `#agent-feed`
+  - Resultado: formato estable para handoffs y progreso
+  - Primer paso: validar campos mínimos del evento
 
-- [ ] (NEXT) Cerrar definición de estructura v2
-  - Resultado: estructura mínima aprobada
-  - Primer paso: confirmar que `STRUCTURE_V2.md` queda como base
+- [ ] (NEXT) Primer tablero operativo textual en `#sistema`
+  - Resultado: snapshot con agentes/proyectos/todos/riesgos
+  - Primer paso: publicar versión v0 manual
 
-- [ ] (NEXT) Arranque limpio de memoria operativa
-  - Resultado: rutina diaria activa con `memory/YYYY-MM-DD.md`
-  - Primer paso: registrar primera entrada de decisión del día
+- [ ] (NEXT) Inventario de proyectos por frentes
+  - Resultado: cada proyecto con owner + estado + next step
+  - Primer paso: crear 1 Project Card por canal principal
 
 ## BLOCKED
-- [ ] (BLOCKED) Decisión sobre relanzar dashboard visual o no
+- [ ] (BLOCKED) Decisión final sobre dashboard visual (sí/no y alcance)
 
 ## WAITING
-- [ ] (WAITING) Priorización final del usuario para fase de reconstrucción
+- [ ] (WAITING) Priorización del usuario sobre frentes de la semana
 
 ## DONE
-- [x] Limpieza de dashboard legacy del root (2026-02-13)
+- [x] Reset workspace y limpieza de dashboard legacy (2026-02-13)
 - [x] Activación de memoria (`memory/` + `MEMORY.md`) (2026-02-13)
-- [x] Reset y push de `system-core` (2026-02-13)
+- [x] Estructura base con `SYSTEM_MAP.md` y `STRUCTURE_V2.md` (2026-02-14)
+- [x] Setup canales Discord por contexto + `#agent-feed` (2026-02-14)

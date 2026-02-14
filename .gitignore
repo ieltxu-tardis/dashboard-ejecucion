@@ -1,0 +1,23 @@
+# Nested repos managed independently
+bridge/
+system-core/
+
+# Temporary / archival
+_trash/
+.tmp-dashboard-repo/
+
+# Agent local bootstrap/persona files (optional local state)
+AGENTS.md
+BOOTSTRAP.md
+HEARTBEAT.md
+IDENTITY.md
+SOUL.md
+TOOLS.md
+USER.md
+
+# Runtime memory (kept local by default)
+memory/
+MEMORY.md
+
+# OS
+.DS_Store
