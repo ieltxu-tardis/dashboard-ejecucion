@@ -45,12 +45,12 @@ out = svc.write_document({
     "content_hash": hashlib.sha256(content.encode()).hexdigest(),
     "metadata": {"phase": 4}
 })
-print(json.dumps({"tenant_id": tenant_id, "doc_id": out["id"]}))
+print(json.dumps({"tenant_id": tenant_id, "doc_id": str(out["id"]).splitlines()[0]}))
 PY
 )
 
-TENANT_ID=$(echo "$DOC_OUT" | python3 -c 'import sys,json; print(json.load(sys.stdin)["tenant_id"])')
-DOC_ID=$(echo "$DOC_OUT" | python3 -c 'import sys,json; print(json.load(sys.stdin)["doc_id"])')
+TENANT_ID=$(echo "$DOC_OUT" | python3 -c 'import sys,json; lines=[l for l in sys.stdin.read().splitlines() if l.strip()]; obj=json.loads(lines[-1]); print(obj["tenant_id"])')
+DOC_ID=$(echo "$DOC_OUT" | python3 -c 'import sys,json; lines=[l for l in sys.stdin.read().splitlines() if l.strip()]; obj=json.loads(lines[-1]); print(obj["doc_id"])')
 
 # Enqueue explicit embed job (do not rely on implicit enqueue path)
 PYTHONPATH=. python3 - <<PY
@@ -92,9 +92,10 @@ res = svc.semantic_search("$TENANT_ID", q, top_k=3)
 print(len(res))
 PY
 )
-if [[ "$SEM" -lt 1 ]]; then
+SEM_NUM=$(echo "$SEM" | python3 -c 'import sys; lines=[l for l in sys.stdin.read().splitlines() if l.strip()]; print(lines[-1])')
+if [[ "$SEM_NUM" -lt 1 ]]; then
   echo "test-jobs: FAIL semantic search empty"
   exit 1
 fi
 
-echo "test-jobs: SUCCESS (embeddings=$CNT, semantic_hits=$SEM)"
+echo "test-jobs: SUCCESS (embeddings=$CNT, semantic_hits=$SEM_NUM)"
