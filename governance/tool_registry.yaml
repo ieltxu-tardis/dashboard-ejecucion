@@ -191,3 +191,69 @@ tools:
     max_memory_mb: 256
     network_policy: none
     filesystem_policy: none
+
+  - name: researchlab.ingest_note
+    scope: research:write
+    input_schema: {type: object, required: [content]}
+    output_schema: {type: object, required: [doc_id]}
+    requires_approval: false
+    cost_class: low
+    max_runtime_ms: 1200
+    max_memory_mb: 128
+    network_policy: none
+    filesystem_policy: none
+
+  - name: researchlab.create_collection
+    scope: research:write
+    input_schema: {type: object, required: [name]}
+    output_schema: {type: object, required: [collection_id]}
+    requires_approval: false
+    cost_class: low
+    max_runtime_ms: 700
+    max_memory_mb: 64
+    network_policy: none
+    filesystem_policy: none
+
+  - name: researchlab.list_collections
+    scope: research:read
+    input_schema: {type: object}
+    output_schema: {type: array}
+    requires_approval: false
+    cost_class: low
+    max_runtime_ms: 700
+    max_memory_mb: 64
+    network_policy: none
+    filesystem_policy: none
+
+  - name: researchlab.add_to_collection
+    scope: research:write
+    input_schema: {type: object, required: [collection_id, doc_id]}
+    output_schema: {type: object, required: [ok]}
+    requires_approval: false
+    cost_class: low
+    max_runtime_ms: 800
+    max_memory_mb: 64
+    network_policy: none
+    filesystem_policy: none
+
+  - name: researchlab.search
+    scope: research:read
+    input_schema: {type: object, required: [query_text]}
+    output_schema: {type: object, required: [status]}
+    requires_approval: false
+    cost_class: med
+    max_runtime_ms: 1500
+    max_memory_mb: 192
+    network_policy: none
+    filesystem_policy: none
+
+  - name: researchlab.context_pack
+    scope: research:read
+    input_schema: {type: object, required: [query_text]}
+    output_schema: {type: object, required: [status]}
+    requires_approval: false
+    cost_class: med
+    max_runtime_ms: 1800
+    max_memory_mb: 192
+    network_policy: none
+    filesystem_policy: none

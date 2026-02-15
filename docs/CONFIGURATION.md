@@ -38,6 +38,10 @@
 - `FINANCE_DEFAULT_CURRENCY` (default `USD`)
 - `FINANCE_IMPORT_MAX_ROWS` (default `1000`)
 
+### ResearchLab (Phase 10)
+- `RESEARCHLAB_DEFAULT_TOP_K` (default `5`)
+- `RESEARCHLAB_MAX_NOTE_SIZE` (default `20000` chars)
+
 ## Notes
 - Keep metrics bound to localhost/internal network.
 - Do not expose sensitive service ports publicly.

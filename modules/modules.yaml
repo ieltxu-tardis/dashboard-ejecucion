@@ -10,3 +10,7 @@ modules:
   - name: financelab
     enabled: false
     description: Finance import preview, commit with approvals, and summaries.
+
+  - name: researchlab
+    enabled: false
+    description: Local knowledge collections and cited search/context packs.

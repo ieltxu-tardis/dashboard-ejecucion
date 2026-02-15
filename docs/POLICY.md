@@ -30,6 +30,8 @@ Extra rule for `validated_structured_extraction`:
 - `ideas:write`
 - `time:read`
 - `time:write`
+- `research:read`
+- `research:write`
 
 ## Enforcement (Phase 6)
 - deny-by-default for unregistered tools
@@ -62,6 +64,12 @@ Extra rule for `validated_structured_extraction`:
 | financelab.spend_summary | finance:read | no | no | low |
 | financelab.commit_import | finance:write | yes | yes | high |
 | financelab.write_transaction | finance:write | yes | yes | high |
+| researchlab.ingest_note | research:write | no | no | low |
+| researchlab.create_collection | research:write | no | no | low |
+| researchlab.list_collections | research:read | no | no | low |
+| researchlab.add_to_collection | research:write | no | no | low |
+| researchlab.search | research:read | no | no | med |
+| researchlab.context_pack | research:read | no | no | med |
 
 ## Audit policy
 On every successful structured write:

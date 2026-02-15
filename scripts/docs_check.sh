@@ -120,7 +120,18 @@ case "$PHASE" in
     [[ -f docs/POLICY.md ]] || fail "missing docs/POLICY.md"
     pass "phase 9 financelab artifacts present"
     ;;
+  10)
+    [[ -f migrations/0012_researchlab.sql ]] || fail "missing migrations/0012_researchlab.sql"
+    [[ -f modules/researchlab/schemas.py ]] || fail "missing modules/researchlab/schemas.py"
+    [[ -f modules/researchlab/tools.py ]] || fail "missing modules/researchlab/tools.py"
+    [[ -f modules/researchlab/service.py ]] || fail "missing modules/researchlab/service.py"
+    [[ -f modules/researchlab/docs/MODULE_researchlab.md ]] || fail "missing modules/researchlab/docs/MODULE_researchlab.md"
+    [[ -f docs/RESEARCHLAB.md ]] || fail "missing docs/RESEARCHLAB.md"
+    [[ -f scripts/test-researchlab.sh ]] || fail "missing scripts/test-researchlab.sh"
+    [[ -f docs/POLICY.md ]] || fail "missing docs/POLICY.md"
+    pass "phase 10 researchlab artifacts present"
+    ;;
   *)
-    fail "usage: ./docs_check <0|1|2|3|4|5|6|7|8|9>"
+    fail "usage: ./docs_check <0|1|2|3|4|5|6|7|8|9|10>"
     ;;
 esac

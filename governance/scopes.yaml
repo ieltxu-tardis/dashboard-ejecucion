@@ -7,11 +7,14 @@ actors:
     - ideas:write
     - time:read
     - time:write
+    - research:read
+    - research:write
   system:
     - memory:read
     - docs:ingest
     - ideas:read
     - time:read
+    - research:read
   finance-admin:
     - memory:read
     - memory:write
@@ -22,3 +25,5 @@ actors:
     - ideas:write
     - time:read
     - time:write
+    - research:read
+    - research:write
