@@ -14,3 +14,7 @@ modules:
   - name: researchlab
     enabled: false
     description: Local knowledge collections and cited search/context packs.
+
+  - name: digesthub
+    enabled: false
+    description: Daily/weekly digests with DM-only delivery in MVP.

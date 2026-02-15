@@ -9,12 +9,15 @@ actors:
     - time:write
     - research:read
     - research:write
+    - digest:read
+    - digest:write
   system:
     - memory:read
     - docs:ingest
     - ideas:read
     - time:read
     - research:read
+    - digest:read
   finance-admin:
     - memory:read
     - memory:write
@@ -27,3 +30,5 @@ actors:
     - time:write
     - research:read
     - research:write
+    - digest:read
+    - digest:write

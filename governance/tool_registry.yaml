@@ -257,3 +257,58 @@ tools:
     max_memory_mb: 192
     network_policy: none
     filesystem_policy: none
+
+  - name: digesthub.subscribe_daily
+    scope: digest:write
+    input_schema: {type: object, required: [actor_id]}
+    output_schema: {type: object, required: [subscription_id, period]}
+    requires_approval: false
+    cost_class: low
+    max_runtime_ms: 700
+    max_memory_mb: 64
+    network_policy: none
+    filesystem_policy: none
+
+  - name: digesthub.subscribe_weekly
+    scope: digest:write
+    input_schema: {type: object, required: [actor_id]}
+    output_schema: {type: object, required: [subscription_id, period]}
+    requires_approval: false
+    cost_class: low
+    max_runtime_ms: 700
+    max_memory_mb: 64
+    network_policy: none
+    filesystem_policy: none
+
+  - name: digesthub.unsubscribe
+    scope: digest:write
+    input_schema: {type: object, required: [actor_id, period]}
+    output_schema: {type: object, required: [ok]}
+    requires_approval: false
+    cost_class: low
+    max_runtime_ms: 600
+    max_memory_mb: 64
+    network_policy: none
+    filesystem_policy: none
+
+  - name: digesthub.preview_daily
+    scope: digest:read
+    input_schema: {type: object, required: [actor_id]}
+    output_schema: {type: object, required: [period, sections, text]}
+    requires_approval: false
+    cost_class: med
+    max_runtime_ms: 1500
+    max_memory_mb: 192
+    network_policy: none
+    filesystem_policy: none
+
+  - name: digesthub.send_now
+    scope: digest:write
+    input_schema: {type: object, required: [actor_id, period]}
+    output_schema: {type: object, required: [status, subscription_id]}
+    requires_approval: false
+    cost_class: med
+    max_runtime_ms: 1800
+    max_memory_mb: 192
+    network_policy: none
+    filesystem_policy: none

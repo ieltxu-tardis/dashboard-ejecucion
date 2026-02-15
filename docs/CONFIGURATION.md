@@ -42,6 +42,13 @@
 - `RESEARCHLAB_DEFAULT_TOP_K` (default `5`)
 - `RESEARCHLAB_MAX_NOTE_SIZE` (default `20000` chars)
 
+### DigestHub (Phase 11)
+- `DIGESTHUB_DEFAULT_TZ` (default `UTC`)
+- `DIGESTHUB_DAILY_HOUR_UTC` (default `9`)
+- `DIGESTHUB_WEEKLY_WEEKDAY` (default `1` Monday)
+- `DIGESTHUB_WEEKLY_HOUR_UTC` (default `10`)
+- `DIGESTHUB_BACKLOG_THRESHOLD` (default `50`, degraded mode trigger)
+
 ## Notes
 - Keep metrics bound to localhost/internal network.
 - Do not expose sensitive service ports publicly.

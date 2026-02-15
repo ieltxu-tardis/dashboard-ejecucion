@@ -131,7 +131,18 @@ case "$PHASE" in
     [[ -f docs/POLICY.md ]] || fail "missing docs/POLICY.md"
     pass "phase 10 researchlab artifacts present"
     ;;
+  11)
+    [[ -f migrations/0013_digesthub.sql ]] || fail "missing migrations/0013_digesthub.sql"
+    [[ -f modules/digesthub/schemas.py ]] || fail "missing modules/digesthub/schemas.py"
+    [[ -f modules/digesthub/tools.py ]] || fail "missing modules/digesthub/tools.py"
+    [[ -f modules/digesthub/service.py ]] || fail "missing modules/digesthub/service.py"
+    [[ -f modules/digesthub/docs/MODULE_digesthub.md ]] || fail "missing modules/digesthub/docs/MODULE_digesthub.md"
+    [[ -f docs/DIGESTHUB.md ]] || fail "missing docs/DIGESTHUB.md"
+    [[ -f scripts/test-digesthub.sh ]] || fail "missing scripts/test-digesthub.sh"
+    [[ -f docs/POLICY.md ]] || fail "missing docs/POLICY.md"
+    pass "phase 11 digesthub artifacts present"
+    ;;
   *)
-    fail "usage: ./docs_check <0|1|2|3|4|5|6|7|8|9|10>"
+    fail "usage: ./docs_check <0|1|2|3|4|5|6|7|8|9|10|11>"
     ;;
 esac

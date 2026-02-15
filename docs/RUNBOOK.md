@@ -88,6 +88,13 @@ PY
 4. Re-run commit with `approval_id`.
 5. If commit retried, dedupe should keep counts stable (no duplicate rows).
 
+### DigestHub scheduler tick
+Use cron/systemd to run:
+```bash
+./scripts/digest-tick.sh
+```
+MVP is DM-only and simulated send mode in tests.
+
 ### Safe mode active unexpectedly
 1. Check env flags (`SAFE_MODE_*`).
 2. Set to `0` and restart relevant processes.

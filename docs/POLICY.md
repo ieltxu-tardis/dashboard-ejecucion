@@ -32,6 +32,8 @@ Extra rule for `validated_structured_extraction`:
 - `time:write`
 - `research:read`
 - `research:write`
+- `digest:read`
+- `digest:write`
 
 ## Enforcement (Phase 6)
 - deny-by-default for unregistered tools
@@ -70,6 +72,11 @@ Extra rule for `validated_structured_extraction`:
 | researchlab.add_to_collection | research:write | no | no | low |
 | researchlab.search | research:read | no | no | med |
 | researchlab.context_pack | research:read | no | no | med |
+| digesthub.subscribe_daily | digest:write | no | no | low |
+| digesthub.subscribe_weekly | digest:write | no | no | low |
+| digesthub.unsubscribe | digest:write | no | no | low |
+| digesthub.preview_daily | digest:read | no | no | med |
+| digesthub.send_now | digest:write | no | no | med |
 
 ## Audit policy
 On every successful structured write:
